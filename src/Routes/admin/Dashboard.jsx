@@ -115,9 +115,9 @@ class Dashboard extends Component {
                 <div className="">
                   <h3>{this.state.expiry_products.length}</h3>
                   <span>
-                    Medicines <br />
+                    Teachers <br />
                     <span style={{ fontSize: "13px" }}>
-                      Expire in less than 90 days
+                      Registered in System
                     </span>
                   </span>
                 </div>
@@ -128,9 +128,9 @@ class Dashboard extends Component {
               <div className="card-single">
                 <div className="">
                   <h3>{this.state.sales_number_monthly}</h3>
-                  <span>Sales</span>
+                  <span>Course Units</span>
                   <br />
-                  <span style={{ fontSize: "13px" }}>Made This Month</span>
+                  <span style={{ fontSize: "13px" }}>Being Taught</span>
                 </div>
                 <div className="">
                   <span className="las la-users"></span>
@@ -139,9 +139,9 @@ class Dashboard extends Component {
               <div className="card-single">
                 <div className="">
                   <h3>{this.state.sales_number_daily}</h3>
-                  <span>Sales</span>
+                  <span>Rooms</span>
                   <br />
-                  <span style={{ fontSize: "13px" }}>Made Today</span>
+                  <span style={{ fontSize: "13px" }}>Available</span>
                 </div>
                 <div className="">
                   <span className="las la-users"> </span>
@@ -150,9 +150,9 @@ class Dashboard extends Component {
               <div className="card-single">
                 <div className="">
                   <h3>{this.state.products.length}</h3>
-                  <span>Medicines</span>
+                  <span>Classes</span>
                   <br />
-                  <span style={{ fontSize: "13px" }}>Registered</span>
+                  <span style={{ fontSize: "13px" }}>In the System</span>
                 </div>
                 <div className="">
                   <span className="las la-users"> </span>
@@ -160,184 +160,7 @@ class Dashboard extends Component {
               </div>
             </div>
             <div className="recent-grid">
-              <div className="projects">
-                <div className="card">
-                  <div className="card-header">
-                    <h3>Batches - Expiring In 90 Days</h3>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      aria-controls="drug-actions"
-                      aria-haspopup="true"
-                      onClick={this.handleOpenActionsDrugs}
-                    >
-                      Menu
-                      <span style={{ fontSize: "17.5px", marginLeft: "10px" }}>
-                        <span className="las la-angle-down"></span>
-                      </span>
-                    </Button>
-                    <Menu
-                      id="drug-actions"
-                      anchorEl={this.state.AnchorElDrugs}
-                      keepMounted
-                      open={Boolean(this.state.AnchorElDrugs)}
-                      onClose={this.handleCloseActionsDrugs}
-                      disableScrollLock={true}
-                    >
-                      <Link to="/new-product">
-                        <MenuItem onClick={this.handleCloseActionsDrugs}>
-                          New Medicine
-                        </MenuItem>
-                      </Link>
-                      <Link to="/all-products">
-                        <MenuItem onClick={this.handleCloseActionsDrugs}>
-                          Medicines
-                        </MenuItem>
-                      </Link>
-                      <Link to="/all-batches">
-                        <MenuItem onClick={this.handleCloseActionsDrugs}>
-                          Medicine Batches
-                        </MenuItem>
-                      </Link>
-                    </Menu>
-                  </div>
-                  <div className="card-body">
-                    <table width="100%">
-                      <thead>
-                        <tr>
-                          <td>Name</td>
-                          <td>Batch No.</td>
-                          <td>Quantity In Batch</td>
-                          <td>Expires On</td>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {this.state.expiry_products.length === 0 ? (
-                          <tr>
-                            <td>No Medicine Expires In 90 days</td>
-                          </tr>
-                        ) : (
-                          this.state.expiry_products.map((v, i) => {
-                            return (
-                              <tr key={i}>
-                                <td className="name_cell">
-                                  {v.product_generic_name}
-                                </td>
-                                <td>{v.batch_no}</td>
-                                <td>{v.batch_qty}</td>
-                                <td>{v.batch_expiry_date}</td>
-                              </tr>
-                            );
-                          })
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div className="projects">
-                <div className="card">
-                  <div className="card-header">
-                    <h3>Quantity Less Re-order Level</h3>
-                    <div className="">
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          window.location.reload();
-                        }}
-                        style={{ marginRight: "15px" }}
-                        className="small-none"
-                      >
-                        <span
-                          style={{ fontSize: "17.5px", marginLeft: "10px" }}
-                        >
-                          <span className="las la-redo"></span>
-                        </span>
-                        Refresh
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        aria-controls="reception-actions"
-                        aria-haspopup="true"
-                        onClick={this.handleOpenActions}
-                      >
-                        Other Menu
-                        <span
-                          style={{ fontSize: "17.5px", marginLeft: "10px" }}
-                        >
-                          <span className="las la-angle-down"></span>
-                        </span>
-                      </Button>
-                      <Menu
-                        id="reception-actions"
-                        anchorEl={this.state.AnchorEl}
-                        keepMounted
-                        open={Boolean(this.state.AnchorEl)}
-                        onClose={this.handleCloseActions}
-                        disableScrollLock={true}
-                      >
-                        <Link to="/new-user">
-                          <MenuItem onClick={this.handleCloseActions}>
-                            New User
-                          </MenuItem>
-                        </Link>
-                        <Link to="/new-supplier">
-                          <MenuItem onClick={this.handleCloseActions}>
-                            New Supplier
-                          </MenuItem>
-                        </Link>
-                        <Link to="/new-customer">
-                          <MenuItem onClick={this.handleCloseActions}>
-                            New Customer
-                          </MenuItem>
-                        </Link>
-                      </Menu>
-                    </div>
-                  </div>
-                  <div className="card-body">
-                    <table width="100%">
-                      <thead>
-                        <tr>
-                          <td>Name</td>
-                          <td>Re-order Level</td>
-                          <td>Quantity</td>
-                          <td>Unit</td>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {this.state.less_qty_pdts.length === 0 ? (
-                          <tr>
-                            <td>No Medicines to display</td>
-                          </tr>
-                        ) : (
-                          this.state.less_qty_pdts.map((v, i) => {
-                            return (
-                              <tr key={i}>
-                                <td className="name_cell">
-                                  {`
-                                  ${v.product_generic_name}
-                                  ${v.product_description_name}
-                                  `}
-                                </td>
-                                <td>{v.product_re_order}</td>
-                                <td>{v.product_qty}</td>
-                                <td>
-                                  {this.IsJsonString(v.product_units)
-                                    ? JSON.parse(v.product_units)[0]
-                                        .selling_unit
-                                    : "No Product Units"}
-                                </td>
-                              </tr>
-                            );
-                          })
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
+              <div className="timetable-for-all">timetable</div>
             </div>
           </main>
         </div>

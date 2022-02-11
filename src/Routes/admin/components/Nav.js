@@ -20,7 +20,7 @@ class Nav extends Component {
                   className="las la-clinic-medical"
                   style={{ fontSize: "32px" }}
                 ></span>
-                <span>Pharmacy</span>
+                <span>LiraUni</span>
               </h2>
             </div>
             <div className="sidebar-menu">
@@ -38,26 +38,26 @@ class Nav extends Component {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/new-sale">
+                  <Link to="/classes">
                     <span
                       className={`${
-                        this.props.active === "sale" ? "active" : ""
+                        this.props.active === "classes" ? "active" : ""
                       } _a_replaced`}
                     >
                       <span className="las la-user-plus"></span>
-                      <span>New Sale</span>
+                      <span>Classes</span>
                     </span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/new-purchase">
+                  <Link to="/teachers">
                     <span
                       className={`${
-                        this.props.active === "purchase" ? "active" : ""
+                        this.props.active === "teachers" ? "active" : ""
                       } _a_replaced`}
                     >
                       <span className="las la-prescription-bottle-alt"></span>
-                      <span>New Purchase</span>
+                      <span>Teachers</span>
                     </span>
                   </Link>
                 </li>

@@ -38,7 +38,7 @@ function Header() {
           <label htmlFor="nav-toggle">
             <span className="las la-bars"></span>
           </label>
-          <span className="health_unit_name">Freedom Health</span>
+          <span className="health_unit_name">Lira University - Timetable</span>
         </h2>
         <div className="" style={{ display: "flex", alignItems: "center" }}>
           <div className="" style={{ fontSize: "42px", marginRight: 20 }}>
