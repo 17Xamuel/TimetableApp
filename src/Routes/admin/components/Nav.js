@@ -62,26 +62,26 @@ class Nav extends Component {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/finance">
+                  <Link to="/rooms">
                     <span
                       className={`${
-                        this.props.active === "finance" ? "active" : ""
+                        this.props.active === "rooms" ? "active" : ""
                       } _a_replaced`}
                     >
                       <span className="las la-comments-dollar"></span>
-                      <span>Finance</span>
+                      <span>Rooms</span>
                     </span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/reports">
+                  <Link to="/course-units">
                     <span
                       className={`${
-                        this.props.active === "reports" ? "active" : ""
+                        this.props.active === "course-units" ? "active" : ""
                       } _a_replaced`}
                     >
                       <span className="las la-comment"></span>
-                      <span>Reports</span>
+                      <span>Course Units</span>
                     </span>
                   </Link>
                 </li>

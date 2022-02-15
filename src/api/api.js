@@ -13,4 +13,13 @@ export default class FormsApi {
       return "Error";
     }
   }
+  async get(i) {
+    try {
+      const res = await axios.get(`${url}${i}`);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return "Error";
+    }
+  }
 }

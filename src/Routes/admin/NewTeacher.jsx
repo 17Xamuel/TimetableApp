@@ -20,7 +20,7 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export default function Classes() {
+export default function Teachers() {
   const [state, setState] = useState({ teacherList: [], mui: {} });
 
   (async () => {
@@ -34,7 +34,7 @@ export default function Classes() {
     }
   })();
 
-  // fucntions
+  // functions
   const handleSubmit = async (e) => {
     e.preventDefault();
     setState({
@@ -52,7 +52,7 @@ export default function Classes() {
       form_contents[i] = v;
     });
     const api = new FormsApi();
-    const res = await api.post("/new-class", form_contents);
+    const res = await api.post("/new-teacher", form_contents);
     if (res === "Error") {
       setState({
         ...state,
@@ -81,7 +81,7 @@ export default function Classes() {
             ...state.mui,
             open: true,
             status: "success",
-            message: "Class Added...",
+            message: "Teacher Added...",
           },
         });
         window.location.reload();
@@ -130,7 +130,7 @@ export default function Classes() {
           <div className="recent-grid">
             <div className="card">
               <div className="card-header">
-                <h3>Classes Registered</h3>
+                <h3>Teachers</h3>
                 <Button
                   variant="contained"
                   color="primary"
@@ -150,23 +150,25 @@ export default function Classes() {
                   <thead>
                     <tr>
                       <td>No.</td>
-                      <td>Code</td>
+                      <td>Email</td>
+                      <td>Name</td>
                       <td>Faculty</td>
                       <td></td>
                     </tr>
                   </thead>
                   <tbody>
-                    {state.classList.length === 0 ? (
+                    {state.teacherList.length === 0 ? (
                       <tr>
-                        <td>No Class Registered</td>
+                        <td>No Teachers To Display</td>
                       </tr>
                     ) : (
-                      state.classList.map((v, i) => {
+                      state.teacherList.map((v, i) => {
                         return (
                           <tr key={i}>
                             <td>{i + 1}</td>
-                            <td>{v.class_code}</td>
-                            <td>{v.class_faculty}</td>
+                            <td>{v.teacher_email}</td>
+                            <td>{v.teacher_name}</td>
+                            <td>{v.teacher_faculty}</td>
                             <td>
                               <Button
                                 variant="outlined"
@@ -175,7 +177,7 @@ export default function Classes() {
                                   console.log("Deleted");
                                 }}
                               >
-                                Delete Class
+                                Delete
                               </Button>
                             </td>
                           </tr>
@@ -189,7 +191,7 @@ export default function Classes() {
             <div className="projects">
               <form className="card" autoComplete="off" onSubmit={handleSubmit}>
                 <div className="card-header ">
-                  <div>Register a New Class</div>
+                  <div>Register a New Teacher</div>
                   <div>
                     <Button
                       type="submit"
@@ -207,14 +209,24 @@ export default function Classes() {
                 <div className="card-body">
                   <div>
                     <div className="inputCtr">
-                      <h4>Class Details</h4>
+                      <h4>Teacher Info</h4>
                       <div className="inputs_ctr">
                         <div className="inpts_on_left">
                           <TextField
-                            name="class_code"
+                            name="teacher_name"
                             variant="outlined"
-                            label="Class Code"
-                            helperText="Format E.G: LCS-19"
+                            label="Teacher's Name"
+                            helperText="Full Name"
+                            style={{
+                              width: "85%",
+                              margin: "20px",
+                            }}
+                          />
+                          <TextField
+                            name="teacher_email"
+                            variant="outlined"
+                            label="Teacher's Email"
+                            helperText="email address for identification"
                             style={{
                               width: "85%",
                               margin: "20px",
@@ -235,7 +247,7 @@ export default function Classes() {
                             </InputLabel>
                             <Select
                               inputProps={{
-                                name: "",
+                                name: "teacher_faculty",
                               }}
                               label="Select Faculty"
                               id="select_faculty"
