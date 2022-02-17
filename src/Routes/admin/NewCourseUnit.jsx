@@ -152,33 +152,55 @@ export default function CoureUnits() {
                       <h4>Course Unit - Details</h4>
                       <div className="inputs_ctr">
                         <div className="inpts_on_left">
+                          <TextField
+                            variant="outlined"
+                            color="primary"
+                            label="Course Unit Name"
+                            name="course_unit_name"
+                            helperText="Full name"
+                            multiline
+                            style={{
+                              width: "85%",
+                              margin: "20px",
+                            }}
+                          />
+                          <TextField
+                            variant="outlined"
+                            color="primary"
+                            label="Credit Units"
+                            name="course_unit_credit_units"
+                            type="number"
+                            style={{
+                              width: "85%",
+                              margin: "20px",
+                            }}
+                          />
                           <FormControl
                             variant="outlined"
-                            label="slect_room"
+                            label="select_room"
                             style={{
                               width: "85%",
                               margin: "20px",
                             }}
                           >
-                            <InputLabel id="room_type">Room Type</InputLabel>
+                            <InputLabel id="select_room">
+                              Select Room
+                            </InputLabel>
                             <Select
                               inputProps={{
-                                name: "room_type",
+                                name: "select_room",
                               }}
-                              label="Select Room Type"
-                              id="select_room_type"
-                              value={state.active_room_type || ""}
+                              label="Select Room"
+                              id="select_room"
+                              value={state.active_room || ""}
                               onChange={async (e, v) => {
                                 setState({
                                   ...state,
-                                  active_room_type: e.target.value,
+                                  active_room: e.target.value,
                                 });
                               }}
                             >
-                              <MenuItem value="lab">Laboratory</MenuItem>
-                              <MenuItem value="lecture_room">
-                                Lecture Room
-                              </MenuItem>
+                              <MenuItem value="lab">Rooms List</MenuItem>
                             </Select>
                           </FormControl>
                         </div>
@@ -221,6 +243,34 @@ export default function CoureUnits() {
                               <MenuItem value="FMS">FMS</MenuItem>
                               <MenuItem value="FHS">FHS</MenuItem>
                               <MenuItem value="EDUC">EDUC</MenuItem>
+                            </Select>
+                          </FormControl>
+                          <FormControl
+                            variant="outlined"
+                            label="course_unit_teacher"
+                            style={{
+                              width: "85%",
+                              margin: "20px",
+                            }}
+                          >
+                            <InputLabel id="course_unit_teacher">
+                              Select a Teacher
+                            </InputLabel>
+                            <Select
+                              inputProps={{
+                                name: "course_unit_teacher",
+                              }}
+                              label="Select a Teacher"
+                              id="course_unit_teacher"
+                              value={state.active_teacher || ""}
+                              onChange={async (e, v) => {
+                                setState({
+                                  ...state,
+                                  active_teacher: e.target.value,
+                                });
+                              }}
+                            >
+                              <MenuItem value="FMS">Teachers List</MenuItem>
                             </Select>
                           </FormControl>
                         </div>

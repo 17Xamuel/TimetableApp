@@ -188,6 +188,7 @@ export default function Rooms() {
                               <MenuItem value="lecture_room">
                                 Lecture Room
                               </MenuItem>
+                              <MenuItem value="field">Field</MenuItem>
                             </Select>
                           </FormControl>
                         </div>
