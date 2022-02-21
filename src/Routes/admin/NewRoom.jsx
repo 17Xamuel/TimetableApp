@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Snackbar,
@@ -23,16 +23,18 @@ function Alert(props) {
 export default function Rooms() {
   const [state, setState] = useState({ roomsList: [], mui: {} });
 
-  (async () => {
-    const api = new FormsApi();
-    const res = await api.get("/rooms");
-    if (res !== "Error") {
-      setState({
-        ...state,
-        roomsList: (typeof res.data === "string" ? [] : res.data) || [],
-      });
-    }
-  })();
+  useEffect(async () => {
+    (async () => {
+      const api = new FormsApi();
+      const res = await api.get("/rooms/all");
+      if (res !== "Error") {
+        setState({
+          ...state,
+          roomsList: (typeof res === "string" ? [] : res) || [],
+        });
+      }
+    })();
+  }, []);
 
   // functions
   const handleSubmit = async (e) => {
@@ -184,11 +186,11 @@ export default function Rooms() {
                                 });
                               }}
                             >
-                              <MenuItem value="lab">Laboratory</MenuItem>
-                              <MenuItem value="lecture_room">
+                              <MenuItem value="Laboratory">Laboratory</MenuItem>
+                              <MenuItem value="Lecture Room">
                                 Lecture Room
                               </MenuItem>
-                              <MenuItem value="field">Field</MenuItem>
+                              <MenuItem value="Field">Field</MenuItem>
                             </Select>
                           </FormControl>
                         </div>
@@ -254,6 +256,7 @@ export default function Rooms() {
                       <td>No.</td>
                       <td>Room Name</td>
                       <td>Faculty</td>
+                      <td>Type</td>
                       <td></td>
                     </tr>
                   </thead>
@@ -269,12 +272,61 @@ export default function Rooms() {
                             <td>{i + 1}</td>
                             <td>{v.room_name}</td>
                             <td>{v.room_faculty}</td>
+                            <td>{v.room_type}</td>
                             <td>
                               <Button
                                 variant="outlined"
                                 color="primary"
-                                onClick={() => {
-                                  console.log("Deleted");
+                                onClick={async () => {
+                                  setState({
+                                    ...state,
+                                    mui: {
+                                      ...state.mui,
+                                      open: true,
+                                      status: "info",
+                                      message: "Deleting....",
+                                    },
+                                  });
+                                  const api = new FormsApi();
+                                  const res = await api.delete(
+                                    `/rooms/delete/${v.id}`
+                                  );
+                                  if (res === "Error") {
+                                    setState({
+                                      ...state,
+                                      mui: {
+                                        ...state.mui,
+                                        open: true,
+                                        status: "warning",
+                                        message:
+                                          "Failed to Delete - Network Error",
+                                      },
+                                    });
+                                  } else {
+                                    if (res.status === false) {
+                                      setState({
+                                        ...state,
+                                        mui: {
+                                          ...state.mui,
+                                          open: true,
+                                          status: "warning",
+                                          message:
+                                            "Failed to Delete - Server Error",
+                                        },
+                                      });
+                                    } else {
+                                      setState({
+                                        ...state,
+                                        mui: {
+                                          ...state.mui,
+                                          open: true,
+                                          status: "success",
+                                          message: "Room Deleted...",
+                                        },
+                                      });
+                                      window.location.reload();
+                                    }
+                                  }
                                 }}
                               >
                                 Delete

@@ -8,7 +8,6 @@ import {
   InputLabel,
   FormControl,
   MenuItem,
-  CircularProgress,
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import Nav from "./components/Nav";
@@ -21,24 +20,23 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export default function Classes() {
-  const [state, setState] = useState({ classList: [], mui: {} });
+export default function Teachers() {
+  const [state, setState] = useState({ teacherList: [], mui: {} });
 
   useEffect(() => {
     (async () => {
       const api = new FormsApi();
-      const res = await api.get("/class/all");
-      console.log(res);
+      const res = await api.get("/teachers");
       if (res !== "Error") {
         setState({
           ...state,
-          classList: (typeof res.data === "string" ? [] : res) || [],
+          teacherList: (typeof res.data === "string" ? [] : res.data) || [],
         });
       }
     })();
   }, []);
 
-  // fucntions
+  // functions
   const handleSubmit = async (e) => {
     e.preventDefault();
     setState({
@@ -56,7 +54,7 @@ export default function Classes() {
       form_contents[i] = v;
     });
     const api = new FormsApi();
-    const res = await api.post("/class/new", form_contents);
+    const res = await api.post("/user/new", form_contents);
     if (res === "Error") {
       setState({
         ...state,
@@ -68,14 +66,14 @@ export default function Classes() {
         },
       });
     } else {
-      if (res.status === false) {
+      if (res.status === "false") {
         setState({
           ...state,
           mui: {
             ...state.mui,
             open: true,
             status: "warning",
-            message: res.data,
+            message: "Some Error Occured...",
           },
         });
       } else {
@@ -85,7 +83,7 @@ export default function Classes() {
             ...state.mui,
             open: true,
             status: "success",
-            message: "Class Added...",
+            message: "Teacher Added...",
           },
         });
         window.location.reload();
@@ -127,14 +125,14 @@ export default function Classes() {
         </Alert>
       </Snackbar>
       <input type="checkbox" id="nav-toggle" defaultChecked />
-      <Nav active="classes" />
+      <Nav active="teachers" />
       <div className="main-content">
         <Header />
         <main>
           <div className="recent-grid">
             <div className="card">
               <div className="card-header">
-                <h3>Classes Registered</h3>
+                <h3>Teachers</h3>
                 <Button
                   variant="contained"
                   color="primary"
@@ -154,23 +152,25 @@ export default function Classes() {
                   <thead>
                     <tr>
                       <td>No.</td>
-                      <td>Code</td>
+                      <td>Email</td>
+                      <td>Name</td>
                       <td>Faculty</td>
                       <td></td>
                     </tr>
                   </thead>
                   <tbody>
-                    {state.classList.length === 0 ? (
+                    {state.teacherList.length === 0 ? (
                       <tr>
-                        <td>No Class Registered</td>
+                        <td>No Teachers To Display</td>
                       </tr>
                     ) : (
-                      state.classList.map((v, i) => {
+                      state.teacherList.map((v, i) => {
                         return (
                           <tr key={i}>
                             <td>{i + 1}</td>
-                            <td>{v.class_code}</td>
-                            <td>{v.faculty}</td>
+                            <td>{v.teacher_email}</td>
+                            <td>{v.teacher_name}</td>
+                            <td>{v.teacher_faculty}</td>
                             <td>
                               <Button
                                 variant="outlined"
@@ -187,7 +187,7 @@ export default function Classes() {
                                   });
                                   const api = new FormsApi();
                                   const res = await api.delete(
-                                    `/class/delete/${v.id}`
+                                    `/user/delete/${v.id}`
                                   );
                                   if (res === "Error") {
                                     setState({
@@ -201,7 +201,7 @@ export default function Classes() {
                                       },
                                     });
                                   } else {
-                                    if (res.status === false) {
+                                    if (res.status === "false") {
                                       setState({
                                         ...state,
                                         mui: {
@@ -219,24 +219,14 @@ export default function Classes() {
                                           ...state.mui,
                                           open: true,
                                           status: "success",
-                                          message: "Class Deleted...",
+                                          message: "Teacher Deleted...",
                                         },
                                       });
-                                      window.location.reload();
                                     }
                                   }
                                 }}
                               >
-                                {state.deleteButtonLoading ? (
-                                  <>
-                                    <CircularProgress size={18} />
-                                    <span style={{ marginLeft: 5 }}>
-                                      Deleting...
-                                    </span>
-                                  </>
-                                ) : (
-                                  "Delete Class"
-                                )}
+                                Delete
                               </Button>
                             </td>
                           </tr>
@@ -250,7 +240,7 @@ export default function Classes() {
             <div className="projects">
               <form className="card" autoComplete="off" onSubmit={handleSubmit}>
                 <div className="card-header ">
-                  <div>Register a New Class</div>
+                  <div>Register a New Teacher</div>
                   <div>
                     <Button
                       type="submit"
@@ -268,14 +258,24 @@ export default function Classes() {
                 <div className="card-body">
                   <div>
                     <div className="inputCtr">
-                      <h4>Class Details</h4>
+                      <h4>Teacher Info</h4>
                       <div className="inputs_ctr">
                         <div className="inpts_on_left">
                           <TextField
-                            name="class_code"
+                            name="teacher_name"
                             variant="outlined"
-                            label="Class Code"
-                            helperText="Format E.G: LCS-19"
+                            label="Teacher's Name"
+                            helperText="Full Name"
+                            style={{
+                              width: "85%",
+                              margin: "20px",
+                            }}
+                          />
+                          <TextField
+                            name="teacher_email"
+                            variant="outlined"
+                            label="Teacher's Email"
+                            helperText="email address for identification"
                             style={{
                               width: "85%",
                               margin: "20px",
@@ -296,7 +296,7 @@ export default function Classes() {
                             </InputLabel>
                             <Select
                               inputProps={{
-                                name: "faculty",
+                                name: "teacher_faculty",
                               }}
                               label="Select Faculty"
                               id="select_faculty"

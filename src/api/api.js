@@ -22,4 +22,12 @@ export default class FormsApi {
       return "Error";
     }
   }
+  async delete(i) {
+    try {
+      return await axios.delete(`${url}${i}`);
+    } catch (error) {
+      console.log(error);
+      return "Error";
+    }
+  }
 }

@@ -9,6 +9,9 @@ import TimeTable from "../../components/tt";
 //styles
 import "../../components/tt.css";
 
+//mui
+import { TextField } from "@material-ui/core";
+
 export default function Dashboard() {
   const [state, setState] = useState({ numbers: {}, mui: {} });
 
@@ -78,6 +81,9 @@ export default function Dashboard() {
           </div>
           <div className="fullwidth-ctr">
             <div className="card">
+              <div className="admin-tt-config">
+                <TextField label="Select TimeTable" />
+              </div>
               <div className="tt-ctr">
                 <TimeTable />
               </div>

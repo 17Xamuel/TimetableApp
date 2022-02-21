@@ -8,6 +8,7 @@ import NewCourseUnit from "../Routes/admin/NewCourseUnit";
 import NewRoom from "../Routes/admin/NewRoom";
 import NewClass from "../Routes/admin/NewClass";
 import NewTeacher from "../Routes/admin/NewTeacher";
+import Exam from "../Routes/admin/Exam";
 import NotFound from "../components/404";
 
 export default () => {
@@ -15,10 +16,11 @@ export default () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/course-units" element={<NewCourseUnit />} />
-        <Route path="/rooms" element={<NewRoom />} />
-        <Route path="/teachers" element={<NewTeacher />} />
-        <Route path="/classes" element={<NewClass />} />
+        <Route path="course-units" element={<NewCourseUnit />} />
+        <Route path="rooms" element={<NewRoom />} />
+        <Route path="teachers" element={<NewTeacher />} />
+        <Route path="classes" element={<NewClass />} />
+        <Route path="exams" element={<Exam />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

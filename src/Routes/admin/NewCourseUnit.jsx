@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Snackbar,
@@ -8,31 +8,61 @@ import {
   InputLabel,
   FormControl,
   MenuItem,
+  Chip,
+  Stack,
 } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
+import { Autocomplete, Alert as MuiAlert } from "@material-ui/lab";
+
 import Nav from "./components/Nav";
 import Header from "./components/Header";
 import FormsApi from "../../api/api";
 
 import "../../design/main.css";
 import "../../design/forms.css";
+
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 export default function CoureUnits() {
-  const [state, setState] = useState({ courseUnitList: [], mui: {} });
+  const [state, setState] = useState({
+    classList: [],
+    teacherList: [],
+    roomsList: [],
+    courseUnitList: [],
+    mui: {},
+    selectedClasses: [],
+  });
 
-  (async () => {
-    const api = new FormsApi();
-    const res = await api.get("/course-units");
-    if (res !== "Error") {
-      setState({
-        ...state,
-        courseUnitList: (typeof res.data === "string" ? [] : res.data) || [],
-      });
-    }
-  })();
+  const changeSelectedClasses = (e, v) =>
+    setState({ ...state, selectedClasses: v });
+
+  useEffect(() => {
+    //teachers
+    (async () => {
+      const api = new FormsApi();
+      const users = await api.get("/users/all");
+      if (users !== "Error") {
+        const rooms = await api.get("/rooms/all");
+        if (rooms !== "Error") {
+          const courses = await api.get("/course-units/all");
+          if (courses !== "Error") {
+            const classes = await api.get("/class/all");
+            if (classes !== "Error") {
+              setState({
+                ...state,
+                classList: (typeof classes === "string" ? [] : classes) || [],
+                courseUnitList:
+                  (typeof courses === "string" ? [] : courses) || [],
+                roomsList: (typeof rooms === "string" ? [] : rooms) || [],
+                teacherList: (typeof users === "string" ? [] : users) || [],
+              });
+            }
+          }
+        }
+      }
+    })();
+  }, []);
 
   // functions
   const handleSubmit = async (e) => {
@@ -43,7 +73,7 @@ export default function CoureUnits() {
         ...state.mui,
         open: true,
         status: "info",
-        message: "Processing...",
+        message: "Please Wait...",
       },
     });
     const form_data = new FormData(e.target);
@@ -51,6 +81,7 @@ export default function CoureUnits() {
     form_data.forEach((v, i) => {
       form_contents[i] = v;
     });
+    form_contents["classes"] = state.selectedClasses;
     const api = new FormsApi();
     const res = await api.post("/course-units/new", form_contents);
     if (res === "Error") {
@@ -64,14 +95,14 @@ export default function CoureUnits() {
         },
       });
     } else {
-      if (res.status === "false") {
+      if (res.status === false) {
         setState({
           ...state,
           mui: {
             ...state.mui,
             open: true,
             status: "warning",
-            message: "Some Error Occured...",
+            message: res.data,
           },
         });
       } else {
@@ -184,13 +215,20 @@ export default function CoureUnits() {
                             }}
                           >
                             <InputLabel id="select_room">
-                              Select Room
+                              {state.roomsList.length === 0
+                                ? "No Rooms Registered"
+                                : "Select Room"}
                             </InputLabel>
                             <Select
                               inputProps={{
                                 name: "select_room",
                               }}
-                              label="Select Room"
+                              disabled={state.roomsList.length === 0}
+                              label={
+                                state.roomsList.length === 0
+                                  ? "No Rooms Registered"
+                                  : "Select Room"
+                              }
                               id="select_room"
                               value={state.active_room || ""}
                               onChange={async (e, v) => {
@@ -200,9 +238,32 @@ export default function CoureUnits() {
                                 });
                               }}
                             >
-                              <MenuItem value="lab">Rooms List</MenuItem>
+                              {state.roomsList.length === 0 ? (
+                                <MenuItem value="">No Rooms Added</MenuItem>
+                              ) : (
+                                state.roomsList.map((v, i) => {
+                                  return (
+                                    <MenuItem value={v.id} key={i}>
+                                      {v.room_name}
+                                    </MenuItem>
+                                  );
+                                })
+                              )}
                             </Select>
                           </FormControl>
+                          <div
+                            className="course-unit-class-selection"
+                            style={{ width: "85%", margin: "20px" }}
+                          >
+                            <h4 style={{ margin: "10px 0px" }}>
+                              Course Unit Classes
+                            </h4>
+                            <ul>
+                              <li>class one</li>
+                              <li>class two</li>
+                              <li>class three</li>
+                            </ul>
+                          </div>
                         </div>
                         <div className="inpts_on_right">
                           <TextField
@@ -254,13 +315,20 @@ export default function CoureUnits() {
                             }}
                           >
                             <InputLabel id="course_unit_teacher">
-                              Select a Teacher
+                              {state.teacherList.length === 0
+                                ? "No Teacher Available"
+                                : "Select a Teacher"}
                             </InputLabel>
                             <Select
                               inputProps={{
                                 name: "course_unit_teacher",
                               }}
-                              label="Select a Teacher"
+                              label={
+                                state.teacherList.length === 0
+                                  ? "No Teacher Available"
+                                  : "Select a Teacher"
+                              }
+                              disabled={state.teacherList.length === 0}
                               id="course_unit_teacher"
                               value={state.active_teacher || ""}
                               onChange={async (e, v) => {
@@ -270,9 +338,43 @@ export default function CoureUnits() {
                                 });
                               }}
                             >
-                              <MenuItem value="FMS">Teachers List</MenuItem>
+                              {state.teacherList.length === 0 ? (
+                                <MenuItem value="">
+                                  No Teacher Available
+                                </MenuItem>
+                              ) : (
+                                state.teacherList.map((v, i) => {
+                                  return (
+                                    <MenuItem value={v.id} key={i}>
+                                      {v.user_name}
+                                    </MenuItem>
+                                  );
+                                })
+                              )}
                             </Select>
                           </FormControl>
+                          <Autocomplete
+                            limitTags={2}
+                            filterSelectedOptions
+                            onChange={changeSelectedClasses}
+                            multiple
+                            getOptionLabel={(opt) => `${opt.class_code}`}
+                            style={{
+                              width: "85%",
+                              margin: "20px",
+                            }}
+                            disablePortal
+                            id="tags-standard"
+                            options={state.classList}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="Select Classes"
+                                variant="outlined"
+                                color="primary"
+                              />
+                            )}
+                          />
                         </div>
                       </div>
                     </div>

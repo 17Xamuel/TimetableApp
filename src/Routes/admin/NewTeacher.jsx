@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Snackbar,
@@ -23,16 +23,18 @@ function Alert(props) {
 export default function Teachers() {
   const [state, setState] = useState({ teacherList: [], mui: {} });
 
-  (async () => {
-    const api = new FormsApi();
-    const res = await api.get("/teachers");
-    if (res !== "Error") {
-      setState({
-        ...state,
-        teacherList: (typeof res.data === "string" ? [] : res.data) || [],
-      });
-    }
-  })();
+  useEffect(() => {
+    (async () => {
+      const api = new FormsApi();
+      const res = await api.get("/users/all");
+      if (res !== "Error") {
+        setState({
+          ...state,
+          teacherList: (typeof res.data === "string" ? [] : res) || [],
+        });
+      }
+    })();
+  }, []);
 
   // functions
   const handleSubmit = async (e) => {
@@ -52,7 +54,8 @@ export default function Teachers() {
       form_contents[i] = v;
     });
     const api = new FormsApi();
-    const res = await api.post("/new-teacher", form_contents);
+    const res = await api.post("/users/new", form_contents);
+    console.log(res);
     if (res === "Error") {
       setState({
         ...state,
@@ -64,14 +67,14 @@ export default function Teachers() {
         },
       });
     } else {
-      if (res.status === "false") {
+      if (res.status === false) {
         setState({
           ...state,
           mui: {
             ...state.mui,
             open: true,
             status: "warning",
-            message: "Some Error Occured...",
+            message: res.data,
           },
         });
       } else {
@@ -166,15 +169,63 @@ export default function Teachers() {
                         return (
                           <tr key={i}>
                             <td>{i + 1}</td>
-                            <td>{v.teacher_email}</td>
-                            <td>{v.teacher_name}</td>
-                            <td>{v.teacher_faculty}</td>
+                            <td>{v.user_email}</td>
+                            <td>{v.user_name}</td>
+                            <td>{v.user_faculty}</td>
                             <td>
                               <Button
                                 variant="outlined"
                                 color="primary"
-                                onClick={() => {
-                                  console.log("Deleted");
+                                onClick={async () => {
+                                  setState({
+                                    ...state,
+                                    mui: {
+                                      ...state.mui,
+                                      open: true,
+                                      status: "info",
+                                      message: "Deleting....",
+                                    },
+                                  });
+                                  const api = new FormsApi();
+                                  const res = await api.delete(
+                                    `/users/delete/${v.id}`
+                                  );
+                                  if (res === "Error") {
+                                    setState({
+                                      ...state,
+                                      mui: {
+                                        ...state.mui,
+                                        open: true,
+                                        status: "warning",
+                                        message:
+                                          "Failed to Delete - Network Error",
+                                      },
+                                    });
+                                  } else {
+                                    if (res.status === "false") {
+                                      setState({
+                                        ...state,
+                                        mui: {
+                                          ...state.mui,
+                                          open: true,
+                                          status: "warning",
+                                          message:
+                                            "Failed to Delete - Server Error",
+                                        },
+                                      });
+                                    } else {
+                                      setState({
+                                        ...state,
+                                        mui: {
+                                          ...state.mui,
+                                          open: true,
+                                          status: "success",
+                                          message: "Teacher Deleted...",
+                                        },
+                                      });
+                                      window.location.reload();
+                                    }
+                                  }
                                 }}
                               >
                                 Delete
@@ -213,7 +264,7 @@ export default function Teachers() {
                       <div className="inputs_ctr">
                         <div className="inpts_on_left">
                           <TextField
-                            name="teacher_name"
+                            name="user_name"
                             variant="outlined"
                             label="Teacher's Name"
                             helperText="Full Name"
@@ -223,7 +274,7 @@ export default function Teachers() {
                             }}
                           />
                           <TextField
-                            name="teacher_email"
+                            name="user_email"
                             variant="outlined"
                             label="Teacher's Email"
                             helperText="email address for identification"
@@ -247,7 +298,7 @@ export default function Teachers() {
                             </InputLabel>
                             <Select
                               inputProps={{
-                                name: "teacher_faculty",
+                                name: "user_faculty",
                               }}
                               label="Select Faculty"
                               id="select_faculty"
@@ -277,311 +328,3 @@ export default function Teachers() {
     </>
   );
 }
-
-// class NewSale extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       open: false,
-//       message: "Please Wait...",
-//       messageState: "",
-//       print: true,
-//       _content: {},
-//       active_product_qty: 0,
-//       active_product_re_order: 0,
-//       over_qty_error: false,
-//       active_sale_type: "retail",
-//       active_selling_unit: "",
-//       active_selling_price: "",
-//       products: [],
-//       customers: [],
-//       formData: [],
-//       total: 0,
-//       discount: 0,
-//       finish_btn_disabled: false,
-//     };
-//   }
-//   //customers
-//   handleSale = async (e) => {
-//     e.preventDefault();
-//     if (this.state.finish_btn_disabled) return;
-//     this.setState({
-//       ...this.state,
-//       open: true,
-//       messageState: "info",
-//       finish_btn_disabled: true,
-//     });
-//     const fd = new FormData(e.target);
-//     let content = {};
-//     fd.forEach((value, key) => {
-//       content[key] = value;
-//     });
-//     await this.setState({ ...this.state, _content: content });
-
-//     if (this.state.formData.length !== 0) {
-//       this.setState({
-//         ...this.state,
-//         _content: {
-//           ...this.state._content,
-//           products_sold: this.state.formData,
-//           date: Date.now(),
-//           user: user.user.username,
-//         },
-//       });
-//     } else {
-//       this.setState({
-//         ...this.state,
-//         open: true,
-//         message: "No Products To Sell",
-//         messageState: "warning",
-//       });
-//       return;
-//     }
-
-//     let api = new FormsApi();
-//     let res = await api.post("/user/sale/new_sale", this.state._content);
-//     if (res.status === true) {
-//       if (this.state.print) {
-//         this.print_receipt(this.state._content);
-//       }
-//       this.setState({
-//         ...this.state,
-//         open: true,
-//         message: res.data,
-//         messageState: "success",
-//         finish_btn_disabled: false,
-//       });
-//       setTimeout(() => {
-//         window.location.reload();
-//       }, 700);
-//     } else {
-//       this.setState({
-//         ...this.state,
-//         open: true,
-//         message: res.data,
-//         messageState: "error",
-//       });
-//     }
-//   };
-
-//   handleSubmit = async (e) => {
-//     e.preventDefault();
-//     if (this.state.over_qty_error) {
-//       this.setState({
-//         ...this.state,
-//         open: true,
-//         messageState: "error",
-//         message: "Quantity Exceeds Available",
-//       });
-//       return;
-//     }
-//     if (!this.state.active_drug) {
-//       this.setState({
-//         ...this.state,
-//         open: true,
-//         messageState: "error",
-//         message: "No Selling Unit",
-//       });
-//       return;
-//     }
-//     this.setState({ ...this.state, open: true, messageState: "info" });
-//     const fd = new FormData(e.target);
-//     let _fcontent = {};
-//     fd.forEach((value, key) => {
-//       _fcontent[key] = value;
-//     });
-//     _fcontent["batch"] = this.state.batch ? this.state.batch : [];
-//     const product_name = this.state.formData.find(
-//       (e) => e.product_name === _fcontent.product_name
-//     );
-//     if (!product_name) {
-//       this.setState({
-//         ...this.state,
-//         open: true,
-//         message: "Product Added",
-//         messageState: "success",
-//         formData: [...this.state.formData, _fcontent],
-//         active_drug: null,
-//       });
-//     } else {
-//       this.setState({
-//         ...this.state,
-//         open: true,
-//         message: "Product Exists",
-//         messageState: "warning",
-//       });
-//     }
-//   };
-
-//   handleDrugNameKeyUp = async (e, v) => {
-//     const res = e.target.value
-//       ? (await UsersApi.data(`/user/sale/products/${e.target.value}`)) || []
-//       : [];
-//     if (res) {
-//       this.setState({ ...this.state, products: res === "Error" ? [] : res });
-//     }
-//   };
-
-//   IsJsonString(str) {
-//     try {
-//       JSON.parse(str);
-//     } catch (e) {
-//       return false;
-//     }
-//     return true;
-//   }
-
-//   handleChangeDrugName = (e, v) => {
-//     if (v) {
-//       if (!this.IsJsonString(v.product_units)) {
-//         this.setState({
-//           ...this.state,
-//           open: true,
-//           message: "This Product has no Selling Units, Edit It to make a sale",
-//           messageState: "warning",
-//         });
-//         return;
-//       }
-//       this.setState(
-//         {
-//           ...this.state,
-//           active_drug: v,
-//         },
-//         () => {
-//           this.setState(
-//             {
-//               ...this.state,
-//               active_selling_unit: JSON.parse(
-//                 this.state.active_drug.product_units
-//               )[0].selling_unit,
-//               active_selling_price: JSON.parse(
-//                 this.state.active_drug.product_units
-//               )[0][this.state.active_sale_type],
-//             },
-//             () => {
-//               this.setState({
-//                 ...this.state,
-//                 active_product_re_order:
-//                   (this.state.active_selling_unit ===
-//                   JSON.parse(this.state.active_drug.product_units)[0]
-//                     .selling_unit
-//                     ? parseInt(this.state.active_drug.product_re_order)
-//                     : parseInt(this.state.active_drug.product_re_order) /
-//                       parseInt(
-//                         JSON.parse(this.state.active_drug.product_units).find(
-//                           (el) => el.selling_unit === e.target.value
-//                         )["qty"]
-//                       )) || 0,
-//                 active_product_qty:
-//                   this.state.active_selling_unit ===
-//                   JSON.parse(this.state.active_drug.product_units)[0]
-//                     .selling_unit
-//                     ? parseInt(this.state.active_drug.product_qty)
-//                     : parseInt(this.state.active_drug.product_qty) /
-//                       parseInt(
-//                         JSON.parse(this.state.active_drug.product_units).find(
-//                           (el) => el.selling_unit === e.target.value
-//                         )["qty"]
-//                       ),
-//               });
-//             }
-//           );
-//         }
-//       );
-//     }
-//   };
-
-//   getTotals() {
-//     let total = 0;
-//     if (this.state.formData.length !== 0) {
-//       this.state.formData.forEach((e) => {
-//         total += parseInt(e.product_price) * parseInt(e.qty);
-//       });
-//     }
-//     return total;
-//   }
-
-//   closePopUp = (event, reason) => {
-//     if (reason === "clickaway") {
-//       return;
-//     }
-//     this.setState({ ...this.state, open: false, message: "" });
-//   };
-
-//   render() {
-
-//   }
-// }
-
-// export default NewSale;
-
-// function Finish({ t, sale_type, customers }) {
-//   const [discount, setDiscount] = useState(0);
-//   return (
-//     <div className="_finish_purchase_ctr">
-//       <TextField
-//         name="total_amount"
-//         variant="outlined"
-//         label="Total"
-//         value={t}
-//         style={{
-//           width: "75%",
-//           margin: "20px",
-//         }}
-//       />
-//       <TextField
-//         name="discount"
-//         variant="outlined"
-//         label="Discount"
-//         type="number"
-//         onChange={(e) => {
-//           setDiscount(parseInt(e.target.value) || 0);
-//         }}
-//         style={{
-//           width: "75%",
-//           margin: "20px",
-//         }}
-//       />
-//       <TextField
-//         name="pay_amount"
-//         variant="outlined"
-//         label="Amount to Be Paid"
-//         value={t - discount}
-//         style={{
-//           width: "75%",
-//           margin: "20px",
-//         }}
-//       />
-//       <FormControl
-//         variant="outlined"
-//         label="customer"
-//         style={
-//           sale_type === "retail"
-//             ? { display: "none" }
-//             : { width: "75%", margin: "20px" }
-//         }
-//       >
-//         <InputLabel id="customer">Customer</InputLabel>
-//         <Select
-//           inputProps={{ name: "customer" }}
-//           label="customer"
-//           id="select_customer"
-//           defaultValue=""
-//         >
-//           {customers.length === 0
-//             ? "No Customer Added"
-//             : customers.map((v, i) => {
-//                 return (
-//                   <MenuItem
-//                     value={`${v.customer_surname} ${v.customer_lastname}`}
-//                     key={i}
-//                   >
-//                     {`${v.customer_surname} ${v.customer_lastname}`}
-//                   </MenuItem>
-//                 );
-//               })}
-//         </Select>
-//       </FormControl>
-//     </div>
-//   );
-// }
