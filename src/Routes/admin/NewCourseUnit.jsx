@@ -26,6 +26,7 @@ function Alert(props) {
 
 export default function CoureUnits() {
   const [state, setState] = useState({
+    courseCodesNumber: [1],
     classList: [],
     teacherList: [],
     roomsList: [],
@@ -163,7 +164,20 @@ export default function CoureUnits() {
               <form className="card" autoComplete="off" onSubmit={handleSubmit}>
                 <div className="card-header">
                   <div>Register/View a Course Unit</div>
-                  <div>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-around" }}
+                  >
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => window.location.reload()}
+                      style={{
+                        width: "85%",
+                        margin: "20px",
+                      }}
+                    >
+                      Refresh
+                    </Button>
                     <Button
                       type="submit"
                       variant="contained"
@@ -251,31 +265,48 @@ export default function CoureUnits() {
                               )}
                             </Select>
                           </FormControl>
-                          <div
-                            className="course-unit-class-selection"
-                            style={{ width: "85%", margin: "20px" }}
-                          >
-                            <h4 style={{ margin: "10px 0px" }}>
-                              Course Unit Classes
-                            </h4>
-                            <ul>
-                              <li>class one</li>
-                              <li>class two</li>
-                              <li>class three</li>
-                            </ul>
-                          </div>
                         </div>
                         <div className="inpts_on_right">
-                          <TextField
-                            name="course_unit_code"
-                            variant="outlined"
-                            label="Course Unit Code"
-                            helperText="Format 'LCS 3201'"
+                          {state.courseCodesNumber.map((v, i) => {
+                            return (
+                              <TextField
+                                name={`course_unit_code[]`}
+                                variant="outlined"
+                                label={`Course Unit Code ${i + 1}`}
+                                helperText="Format 'LCS 3201'"
+                                style={{
+                                  width: "85%",
+                                  margin: "20px",
+                                }}
+                              />
+                            );
+                          })}
+
+                          <div
                             style={{
+                              display: "flex",
+                              justifyContent: "flex-end",
                               width: "85%",
-                              margin: "20px",
+                              margin: "0px 20px",
                             }}
-                          />
+                          >
+                            <Button
+                              variant="contained"
+                              onClick={() => {
+                                setState({
+                                  ...state,
+                                  courseCodesNumber: [
+                                    ...state.courseCodesNumber,
+                                    state.courseCodesNumber[
+                                      state.courseCodesNumber.length - 1
+                                    ] + 1,
+                                  ],
+                                });
+                              }}
+                            >
+                              Add Course Code
+                            </Button>
+                          </div>
                           <FormControl
                             variant="outlined"
                             label="faculty_name"
