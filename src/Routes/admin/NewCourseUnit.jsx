@@ -270,7 +270,7 @@ export default function CoureUnits() {
                           {state.courseCodesNumber.map((v, i) => {
                             return (
                               <TextField
-                                name={`course_unit_code[]`}
+                                name={`course_unit_code_${i + 1}`}
                                 variant="outlined"
                                 label={`Course Unit Code ${i + 1}`}
                                 helperText="Format 'LCS 3201'"
@@ -307,36 +307,6 @@ export default function CoureUnits() {
                               Add Course Code
                             </Button>
                           </div>
-                          <FormControl
-                            variant="outlined"
-                            label="faculty_name"
-                            style={{
-                              width: "85%",
-                              margin: "20px",
-                            }}
-                          >
-                            <InputLabel id="faculty_name">
-                              Select Faculty
-                            </InputLabel>
-                            <Select
-                              inputProps={{
-                                name: "course_unit_faculty",
-                              }}
-                              label="Select Faculty"
-                              id="select_faculty"
-                              value={state.active_faculty || ""}
-                              onChange={async (e, v) => {
-                                setState({
-                                  ...state,
-                                  active_faculty: e.target.value,
-                                });
-                              }}
-                            >
-                              <MenuItem value="FMS">FMS</MenuItem>
-                              <MenuItem value="FHS">FHS</MenuItem>
-                              <MenuItem value="EDUC">EDUC</MenuItem>
-                            </Select>
-                          </FormControl>
                           <FormControl
                             variant="outlined"
                             label="course_unit_teacher"
