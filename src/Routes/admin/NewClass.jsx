@@ -28,7 +28,6 @@ export default function Classes() {
     (async () => {
       const api = new FormsApi();
       const res = await api.get("/class/all");
-      console.log(res);
       if (res !== "Error") {
         setState({
           ...state,
@@ -281,6 +280,34 @@ export default function Classes() {
                               margin: "20px",
                             }}
                           />
+                          <FormControl
+                            variant="outlined"
+                            label="study_time"
+                            required
+                            style={{
+                              width: "85%",
+                              margin: "20px",
+                            }}
+                          >
+                            <InputLabel id="study_time">Study Time</InputLabel>
+                            <Select
+                              inputProps={{
+                                name: "study_time",
+                              }}
+                              label="Study Time"
+                              id="study_time"
+                              value={state.active_study_time || ""}
+                              onChange={async (e, v) => {
+                                setState({
+                                  ...state,
+                                  active_study_time: e.target.value,
+                                });
+                              }}
+                            >
+                              <MenuItem value="day">Day</MenuItem>
+                              <MenuItem value="weekend">Weekend</MenuItem>
+                            </Select>
+                          </FormControl>
                         </div>
                         <div className="inpts_on_right">
                           <FormControl
