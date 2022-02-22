@@ -235,7 +235,7 @@ export default function CoureUnits() {
                             </InputLabel>
                             <Select
                               inputProps={{
-                                name: "select_room",
+                                name: "course_unit_room",
                               }}
                               disabled={state.roomsList.length === 0}
                               label={
@@ -354,7 +354,7 @@ export default function CoureUnits() {
                               )}
                             </Select>
                           </FormControl>
-                          <Autocomplete
+                          {/* <Autocomplete
                             limitTags={2}
                             filterSelectedOptions
                             onChange={changeSelectedClasses}
@@ -375,7 +375,7 @@ export default function CoureUnits() {
                                 color="primary"
                               />
                             )}
-                          />
+                          /> */}
                         </div>
                       </div>
                     </div>
