@@ -303,6 +303,7 @@ export default function Classes() {
                                   active_study_time: e.target.value,
                                 });
                               }}
+                              x
                             >
                               <MenuItem value="day">Day</MenuItem>
                               <MenuItem value="weekend">Weekend</MenuItem>
