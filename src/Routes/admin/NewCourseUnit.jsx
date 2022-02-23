@@ -354,7 +354,7 @@ export default function CoureUnits() {
                               )}
                             </Select>
                           </FormControl>
-                          {/* <Autocomplete
+                          <Autocomplete
                             limitTags={2}
                             filterSelectedOptions
                             onChange={changeSelectedClasses}
@@ -375,7 +375,7 @@ export default function CoureUnits() {
                                 color="primary"
                               />
                             )}
-                          /> */}
+                          />
                         </div>
                       </div>
                     </div>
