@@ -10,7 +10,7 @@ import {
   MenuItem,
   CircularProgress,
 } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
+import { Autocomplete, Alert as MuiAlert } from "@material-ui/lab";
 import Nav from "./components/Nav";
 import Header from "./components/Header";
 import FormsApi from "../../api/api";
@@ -22,20 +22,32 @@ function Alert(props) {
 }
 
 export default function Classes() {
-  const [state, setState] = useState({ classList: [], mui: {} });
+  const [state, setState] = useState({
+    classList: [],
+    mui: {},
+    courseList: [],
+    selectedCourses: [],
+  });
 
   useEffect(() => {
     (async () => {
       const api = new FormsApi();
       const res = await api.get("/class/all");
       if (res !== "Error") {
-        setState({
-          ...state,
-          classList: (typeof res.data === "string" ? [] : res) || [],
-        });
+        const courses = await api.get("/course-units/all");
+        if (courses !== "Error") {
+          setState({
+            ...state,
+            classList: (typeof res === "string" ? [] : res) || [],
+            courseList: (typeof courses === "string" ? [] : courses) || [],
+          });
+        }
       }
     })();
   }, []);
+
+  const changeSelectedCourses = (e, v) =>
+    setState({ ...state, selectedCourses: v });
 
   // fucntions
   const handleSubmit = async (e) => {
@@ -54,6 +66,7 @@ export default function Classes() {
     form_data.forEach((v, i) => {
       form_contents[i] = v;
     });
+    form_contents["class_course_units"] = state.selectedCourses;
     const api = new FormsApi();
     const res = await api.post("/class/new", form_contents);
     if (res === "Error") {
@@ -266,51 +279,33 @@ export default function Classes() {
                 </div>
                 <div className="card-body">
                   <div>
-                    <div className="inputCtr">
-                      <h4>Class Details</h4>
-                      <div className="inputs_ctr">
+                    <div
+                      className="inputCtr"
+                      style={{
+                        border: "1px solid rgba(0, 0, 0, 0.1)",
+                        borderRadius: "5px",
+                      }}
+                    >
+                      <div
+                        className=""
+                        style={{
+                          width: "100%",
+                          margin: "15px auto",
+                          display: "flex",
+                          justifyContent: "space-around",
+                        }}
+                      >
                         <div className="inpts_on_left">
                           <TextField
                             name="class_code"
                             variant="outlined"
                             label="Class Code"
-                            helperText="Format E.G: LCS-19"
+                            helperText="Format E.G: LCS-2"
                             style={{
                               width: "85%",
                               margin: "20px",
                             }}
                           />
-                          <FormControl
-                            variant="outlined"
-                            label="study_time"
-                            required
-                            style={{
-                              width: "85%",
-                              margin: "20px",
-                            }}
-                          >
-                            <InputLabel id="study_time">Study Time</InputLabel>
-                            <Select
-                              inputProps={{
-                                name: "study_time",
-                              }}
-                              label="Study Time"
-                              id="study_time"
-                              value={state.active_study_time || ""}
-                              onChange={async (e, v) => {
-                                setState({
-                                  ...state,
-                                  active_study_time: e.target.value,
-                                });
-                              }}
-                              x
-                            >
-                              <MenuItem value="day">Day</MenuItem>
-                              <MenuItem value="weekend">Weekend</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </div>
-                        <div className="inpts_on_right">
                           <FormControl
                             variant="outlined"
                             label="faculty_name"
@@ -342,6 +337,61 @@ export default function Classes() {
                             </Select>
                           </FormControl>
                         </div>
+                        <div className="inpts_on_right">
+                          <FormControl
+                            variant="outlined"
+                            label="study_time"
+                            required
+                            style={{
+                              width: "85%",
+                              margin: "20px",
+                            }}
+                          >
+                            <InputLabel id="study_time">Study Time</InputLabel>
+                            <Select
+                              inputProps={{
+                                name: "study_time",
+                              }}
+                              // helperText="Important!! Either Weekend Or Day"
+                              label="Study Time"
+                              id="study_time"
+                              value={state.active_study_time || ""}
+                              onChange={async (e, v) => {
+                                setState({
+                                  ...state,
+                                  active_study_time: e.target.value,
+                                });
+                              }}
+                            >
+                              <MenuItem value="day">Day</MenuItem>
+                              <MenuItem value="weekend">Weekend</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </div>
+                      </div>
+                      <div>
+                        <Autocomplete
+                          limitTags={2}
+                          filterSelectedOptions
+                          onChange={changeSelectedCourses}
+                          multiple
+                          getOptionLabel={(opt) => `${opt.course_unit_name}`}
+                          style={{
+                            width: "90%",
+                            margin: "20px",
+                          }}
+                          disablePortal
+                          id="tags-standard"
+                          options={state.courseList}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Select Course Units"
+                              variant="outlined"
+                              color="primary"
+                            />
+                          )}
+                        />
                       </div>
                     </div>
                   </div>

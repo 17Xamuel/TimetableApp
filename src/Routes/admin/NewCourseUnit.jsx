@@ -11,7 +11,7 @@ import {
   Chip,
   Stack,
 } from "@material-ui/core";
-import { Autocomplete, Alert as MuiAlert } from "@material-ui/lab";
+import { Alert as MuiAlert } from "@material-ui/lab";
 
 import Nav from "./components/Nav";
 import Header from "./components/Header";
@@ -34,9 +34,6 @@ export default function CoureUnits() {
     mui: {},
     selectedClasses: [],
   });
-
-  const changeSelectedClasses = (e, v) =>
-    setState({ ...state, selectedClasses: v });
 
   useEffect(() => {
     //teachers
@@ -82,7 +79,6 @@ export default function CoureUnits() {
     form_data.forEach((v, i) => {
       form_contents[i] = v;
     });
-    form_contents["classes"] = state.selectedClasses;
     const api = new FormsApi();
     const res = await api.post("/course-units/new", form_contents);
     if (res === "Error") {
@@ -265,11 +261,42 @@ export default function CoureUnits() {
                               )}
                             </Select>
                           </FormControl>
+                          <FormControl
+                            variant="outlined"
+                            label="semester"
+                            style={{
+                              width: "85%",
+                              margin: "20px",
+                            }}
+                          >
+                            <InputLabel id="semester">
+                              Select Semester
+                            </InputLabel>
+                            <Select
+                              inputProps={{
+                                name: "semester",
+                              }}
+                              label="Select Semester"
+                              id="semester"
+                              value={state.active_semester || ""}
+                              onChange={async (e, v) => {
+                                setState({
+                                  ...state,
+                                  active_semester: e.target.value,
+                                });
+                              }}
+                            >
+                              <MenuItem value="1">Semester 1</MenuItem>
+                              <MenuItem value="2">Semester 2</MenuItem>
+                              <MenuItem value="3">Recess Term</MenuItem>
+                            </Select>
+                          </FormControl>
                         </div>
                         <div className="inpts_on_right">
                           {state.courseCodesNumber.map((v, i) => {
                             return (
                               <TextField
+                                key={i}
                                 name={`course_unit_code_${i + 1}`}
                                 variant="outlined"
                                 label={`Course Unit Code ${i + 1}`}
@@ -354,28 +381,6 @@ export default function CoureUnits() {
                               )}
                             </Select>
                           </FormControl>
-                          {/* <Autocomplete
-                            limitTags={2}
-                            filterSelectedOptions
-                            onChange={changeSelectedClasses}
-                            multiple
-                            getOptionLabel={(opt) => `${opt.class_code}`}
-                            style={{
-                              width: "85%",
-                              margin: "20px",
-                            }}
-                            disablePortal
-                            id="tags-standard"
-                            options={state.classList}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                label="Select Classes"
-                                variant="outlined"
-                                color="primary"
-                              />
-                            )}
-                          /> */}
                         </div>
                       </div>
                     </div>
@@ -404,9 +409,8 @@ export default function CoureUnits() {
                 <table width="100%">
                   <thead>
                     <tr>
-                      <td>No.</td>
-                      <td>Code</td>
-                      <td>Teacher</td>
+                      <td>Code(s)</td>
+                      <td>Name</td>
                       <td></td>
                       <td></td>
                     </tr>
@@ -418,11 +422,11 @@ export default function CoureUnits() {
                       </tr>
                     ) : (
                       state.courseUnitList.map((v, i) => {
+                        let codes = JSON.parse(v.course_unit_codes);
                         return (
                           <tr key={i}>
-                            <td>{i + 1}</td>
-                            <td>{v.course_unit_code}</td>
-                            <td>{v.course_unit_teacher}</td>
+                            <td>{codes[0]}</td>
+                            <td>{v.course_unit_name}</td>
                             <td>
                               <Button
                                 variant="outlined"

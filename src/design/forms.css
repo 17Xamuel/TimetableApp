@@ -115,3 +115,30 @@ td {
     margin: auto;
   }
 }
+
+/*
+generate form...
+*/
+
+.admin-tt-config {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  margin: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+}
+.admin-tt-config > div > div:first-child {
+  font-size: 18px;
+  font-weight: 500;
+}
+.admin-tt-config > div {
+  margin: 10px 0px 10px 30px;
+}
+@media screen and (max-width: 768px) {
+  .admin-tt-config {
+    flex-direction: column;
+  }
+}
+/*
+generate form...
+*/
