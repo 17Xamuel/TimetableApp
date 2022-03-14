@@ -8,8 +8,6 @@ import {
   InputLabel,
   FormControl,
   MenuItem,
-  Chip,
-  Stack,
 } from "@material-ui/core";
 import { Alert as MuiAlert } from "@material-ui/lab";
 
@@ -381,28 +379,6 @@ export default function CoureUnits() {
                               )}
                             </Select>
                           </FormControl>
-                          <Autocomplete
-                            limitTags={2}
-                            filterSelectedOptions
-                            onChange={changeSelectedClasses}
-                            multiple
-                            getOptionLabel={(opt) => `${opt.class_code}`}
-                            style={{
-                              width: "85%",
-                              margin: "20px",
-                            }}
-                            disablePortal
-                            id="tags-standard"
-                            options={state.classList}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                label="Select Classes"
-                                variant="outlined"
-                                color="primary"
-                              />
-                            )}
-                          />
                         </div>
                       </div>
                     </div>

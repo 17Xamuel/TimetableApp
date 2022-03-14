@@ -1,6 +1,11 @@
 .tt-ctr {
   width: 100%;
 }
+.tt-content-border {
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
 .tt-content-ctr {
   margin: 20px;
   padding: 10px;

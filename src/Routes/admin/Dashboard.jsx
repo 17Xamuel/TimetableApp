@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 //components
 import Nav from "./components/Nav";
@@ -27,18 +27,21 @@ export default function Dashboard() {
     clearing: "false",
     numbers: {},
     mui: {},
+    tt: [],
   });
 
-  (async () => {
-    const api = new FormsApi();
-    const res = await api.get("/dashboard/numbers");
-    if (res !== "Error") {
-      setState({
-        ...state,
-        numbers: (typeof res.data === "string" ? {} : res.data) || {},
-      });
-    }
-  })();
+  useEffect(() => {
+    (async () => {
+      const api = new FormsApi();
+      const res = await api.get("/dashboard/numbers");
+      if (res !== "Error") {
+        setState({
+          ...state,
+          numbers: (typeof res.data === "string" ? {} : res.data) || {},
+        });
+      }
+    })();
+  }, []);
 
   const handleClear = async () => {
     setState({
@@ -89,8 +92,8 @@ export default function Dashboard() {
         setState({
           ...state,
           generating: "false",
+          tt: res.result,
         });
-        window.location.reload();
       }
     }
   };
@@ -264,7 +267,11 @@ export default function Dashboard() {
                 </div>
               </form>
               <div className="tt-ctr">
-                <TimeTable />
+                {state.tt.length === 0 ? (
+                  <TimeTable tt="No TimeTable Generated" />
+                ) : (
+                  <TimeTable tt={state.tt} />
+                )}
               </div>
             </div>
           </div>
