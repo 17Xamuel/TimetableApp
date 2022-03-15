@@ -9,7 +9,7 @@ import {
   FormControl,
   MenuItem,
 } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
+import { Alert as MuiAlert, Autocomplete } from "@material-ui/lab";
 import Nav from "./components/Nav";
 import Header from "./components/Header";
 import FormsApi from "../../api/api";
@@ -267,7 +267,6 @@ export default function Teachers() {
                             name="user_name"
                             variant="outlined"
                             label="Teacher's Name"
-                            helperText="Full Name"
                             style={{
                               width: "85%",
                               margin: "20px",
@@ -315,6 +314,37 @@ export default function Teachers() {
                               <MenuItem value="EDUC">EDUC</MenuItem>
                             </Select>
                           </FormControl>
+                          <Autocomplete
+                            limitTags={2}
+                            filterSelectedOptions
+                            onChange={changeSelectedDays}
+                            multiple
+                            // getOptionLabel={(opt) => `${opt.day}`}
+                            style={{
+                              width: "90%",
+                              margin: "20px",
+                            }}
+                            disablePortal
+                            id="tags-standard"
+                            options={[
+                              "Full Time",
+                              "Monday",
+                              "Tuesday",
+                              "Wednesday",
+                              "Thursday",
+                              "Friday",
+                              "Saturday",
+                              "Sunday",
+                            ]}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                label="Teacher Availability"
+                                variant="outlined"
+                                color="primary"
+                              />
+                            )}
+                          />
                         </div>
                       </div>
                     </div>

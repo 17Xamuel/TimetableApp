@@ -1,5 +1,5 @@
 .home-ctr {
-  width: 80%;
+  width: 85%;
   margin: 20px auto;
 }
 /**
@@ -37,7 +37,7 @@ timetable container
 .home-body-tt-ctr {
   border-radius: 5px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-  padding: 10px;
+  /* padding: 10px; */
   min-height: 200px;
 }
 

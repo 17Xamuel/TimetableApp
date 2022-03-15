@@ -19,12 +19,40 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 
+//api
+import FormsApi from "./api/api";
+
 export default () => {
-  const [state, setState] = useState({});
+  const [state, setState] = useState({ tt: [] });
 
   useEffect(() => {
     document.body.style.backgroundColor = "#fff";
   }, []);
+
+  const generate = async () => {
+    const api = new FormsApi();
+    const res = await api.post("/users/admin/generate", {});
+    if (res === "Error") {
+      setState({
+        ...state,
+        generate: "Error",
+      });
+    } else {
+      if (res.status === false) {
+        setState({
+          ...state,
+          generating: "Error",
+        });
+      } else {
+        setState({
+          ...state,
+          generate: false,
+          tt: res.result,
+        });
+      }
+    }
+  };
+
   return (
     <>
       <div className="home-ctr">
@@ -144,6 +172,7 @@ export default () => {
                       active_semester: e.target.value,
                       generate: true,
                     });
+                    generate();
                   }}
                 >
                   <MenuItem value="1">Semester I</MenuItem>
@@ -164,14 +193,16 @@ export default () => {
               </Button>
             </div>
           </div>
-          <div className="home-body-tt-ctr">
+          <div className="home-body-tt-ctr tt-ctr">
             {state.generate ? (
               <div className="">
                 <CircularProgress size={15} />
-                <span style={{ marginLeft: "10px" }}>Generating....</span>
+                <span style={{ margin: "10px" }}>Generating....</span>
               </div>
+            ) : state.tt.length === 0 ? (
+              <span style={{ margin: "10px" }}>No timetable Generated</span>
             ) : (
-              <span>No timetable Generated</span>
+              <TimeTable tt={state.tt} />
             )}
           </div>
         </div>

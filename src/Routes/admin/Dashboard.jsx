@@ -33,11 +33,11 @@ export default function Dashboard() {
   useEffect(() => {
     (async () => {
       const api = new FormsApi();
-      const res = await api.get("/dashboard/numbers");
+      const res = await api.get("/users/admin/numbers");
       if (res !== "Error") {
         setState({
           ...state,
-          numbers: (typeof res.data === "string" ? {} : res.data) || {},
+          numbers: (res.status === false ? {} : res.result) || {},
         });
       }
     })();
@@ -134,7 +134,7 @@ export default function Dashboard() {
                 <h3>{state.numbers.rooms || "..."}</h3>
                 <span>Rooms</span>
                 <br />
-                <span style={{ fontSize: "13px" }}>For Lecture</span>
+                <span style={{ fontSize: "13px" }}>For Lectures</span>
               </div>
               <div className="">
                 <span className="las la-users"> </span>
@@ -268,7 +268,7 @@ export default function Dashboard() {
               </form>
               <div className="tt-ctr">
                 {state.tt.length === 0 ? (
-                  <TimeTable tt="No TimeTable Generated" />
+                  <TimeTable tt={state.tt} />
                 ) : (
                   <TimeTable tt={state.tt} />
                 )}
