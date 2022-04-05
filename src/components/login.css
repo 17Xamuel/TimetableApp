@@ -34,14 +34,14 @@
   color: #fff;
   font-size: 18.5px;
 }
-.img {
+/* .img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   position: absolute;
   top: 0px;
   right: 0px;
-}
+} */
 @media screen and (max-width: 1024px) {
   .img {
     display: none;

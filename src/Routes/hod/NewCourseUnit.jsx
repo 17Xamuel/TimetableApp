@@ -151,7 +151,7 @@ export default function CoureUnits() {
       <input type="checkbox" id="nav-toggle" defaultChecked />
       <Nav active="course-units" />
       <div className="main-content">
-        <Header />
+        <Header title="Computing &amp; Info. Sciences" />
         <main>
           <div className="recent-grid">
             <div className="projects">

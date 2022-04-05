@@ -1,19 +1,16 @@
 import React, { useState } from "react";
 import { TextField, Button, CircularProgress } from "@material-ui/core";
 import FormsApi from "../api/api";
-import Image from "../assets/timetable.png";
-import Logo from "../assets/fhp.jpg";
+import Logo from "../assets/lirauni.jpg";
 import { Base64 } from "js-base64";
 //design
 import "./login.css";
 
 function Login() {
   const [user, setUser] = useState({
-    username: "",
-    password: "",
+    dept: "",
+    pin: "",
     _cp: true,
-    password_mismatch: false,
-    activate: false,
   });
   const [loaderOpen, setloaderOpen] = useState(false);
   const [ServerError, setServerError] = useState("");
@@ -24,22 +21,12 @@ function Login() {
     formData.forEach((v, i) => {
       form_contents[i] = v;
     });
-    if (user.activate) form_contents["new"] = "true";
     const api = new FormsApi();
-    if (user.activate) {
-      const res = await api.post("/user/new", form_contents);
-      if (res === "Error") {
-        setServerError(true);
-      } else {
-        console.log(res);
-      }
+    const res = await api.post("/user/login", form_contents);
+    if (res === "Error") {
+      setServerError(true);
     } else {
-      const res = await api.post("/user/login", form_contents);
-      if (res === "Error") {
-        setServerError(true);
-      } else {
-        console.log(res);
-      }
+      console.log(res);
     }
   };
   return (
@@ -49,11 +36,11 @@ function Login() {
     >
       <form className="ctr" onSubmit={submit}>
         <img
-          alt="Hospital"
+          alt="Logo"
           src={Logo}
           height="120px"
-          width="150px"
-          style={{ objectFit: "cover" }}
+          width="270px"
+          style={{ objectFit: "contain" }}
         />
         <div
           className="header"
@@ -65,10 +52,10 @@ function Login() {
         </div>
         <div className="loginCtr">
           <TextField
-            name="email"
+            name=""
             variant="standard"
-            label="Email"
-            helperText={!user._cp ? "Incorrect Email Or Password" : ""}
+            label="Department Number"
+            helperText={!user._cp ? "Incorrect Department" : ""}
             error={!user._cp}
             fullWidth
             required
@@ -79,36 +66,16 @@ function Login() {
             }}
           />
           <TextField
-            type="password"
-            name="password"
+            type="number"
+            name="pin"
             variant="standard"
-            helperText={
-              !user._cp
-                ? "Incorrect Email Or Password"
-                : user.password_mismatch
-                ? "Passwords Do not Match"
-                : ""
-            }
-            label="Password"
+            helperText={!user._cp ? "Incorrect Pin" : ""}
+            label="Pin"
             required
-            error={!user._cp || user.password_mismatch}
+            error={!user._cp}
             fullWidth
             style={{
               display: "block",
-              margin: "30px 0px",
-            }}
-          />
-          <TextField
-            type="password"
-            name="repeat_password"
-            variant="standard"
-            helperText={user.password_mismatch ? "Passwords Do not Match" : ""}
-            label="Repeat Password"
-            required={user.activate}
-            error={!user._cp || user.password_mismatch}
-            fullWidth
-            style={{
-              display: user.activate ? "block" : "none",
               margin: "30px 0px",
             }}
           />
@@ -121,24 +88,11 @@ function Login() {
             color="primary"
             style={{ marginRight: 10 }}
           >
-            Login
+            Go
             <span style={{ fontSize: "17.5px", marginLeft: "10px" }}>
               <i className="las la-sign-in-alt"></i>
             </span>
           </Button>
-          <span
-            onClick={() => {
-              setUser({ ...user, activate: !user.activate });
-            }}
-            style={{
-              color: "#3F51B5",
-              margin: "15px 5px",
-              cursor: "pointer",
-              fontSize: "14px",
-            }}
-          >
-            {user.activate ? "My Account is active" : "Activate My Account"}
-          </span>
         </div>
         {/* for loader */}
         <div
@@ -150,7 +104,6 @@ function Login() {
         </div>
         {/* for loader */}
       </form>
-      <img src={Image} className="img" alt="Hospital" />
     </div>
   );
 }
