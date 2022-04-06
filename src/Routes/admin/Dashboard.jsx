@@ -77,6 +77,7 @@ export default function Dashboard() {
     });
     const api = new FormsApi();
     const res = await api.post("/users/admin/generate", form_contents);
+    console.log(res.result);
     if (res === "Error") {
       setState({
         ...state,
