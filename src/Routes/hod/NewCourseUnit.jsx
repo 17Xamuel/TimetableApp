@@ -14,6 +14,7 @@ import { Alert as MuiAlert } from "@material-ui/lab";
 import Nav from "./components/Nav";
 import Header from "./components/Header";
 import FormsApi from "../../api/api";
+import dept from "../../app_config";
 
 import "../../design/main.css";
 import "../../design/forms.css";
@@ -151,27 +152,16 @@ export default function CoureUnits() {
       <input type="checkbox" id="nav-toggle" defaultChecked />
       <Nav active="course-units" />
       <div className="main-content">
-        <Header title="Computing &amp; Info. Sciences" />
+        <Header />
         <main>
-          <div className="recent-grid">
+          <div className="recent-grid-right">
             <div className="projects">
               <form className="card" autoComplete="off" onSubmit={handleSubmit}>
                 <div className="card-header">
-                  <div>Register/View a Course Unit</div>
+                  <div>Register A Course Unit</div>
                   <div
                     style={{ display: "flex", justifyContent: "space-around" }}
                   >
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => window.location.reload()}
-                      style={{
-                        width: "85%",
-                        margin: "20px",
-                      }}
-                    >
-                      Refresh
-                    </Button>
                     <Button
                       type="submit"
                       variant="contained"
@@ -191,6 +181,7 @@ export default function CoureUnits() {
                       <h4>Course Unit - Details</h4>
                       <div className="inputs_ctr">
                         <div className="inpts_on_left">
+                          <input type="hidden" name="dept" value={dept.id} />
                           <TextField
                             variant="outlined"
                             color="primary"
@@ -409,7 +400,7 @@ export default function CoureUnits() {
                     <tr>
                       <td>Code(s)</td>
                       <td>Name</td>
-                      <td></td>
+                      <td>Teacher</td>
                       <td></td>
                     </tr>
                   </thead>
@@ -421,10 +412,14 @@ export default function CoureUnits() {
                     ) : (
                       state.courseUnitList.map((v, i) => {
                         let codes = JSON.parse(v.course_unit_codes);
+                        let teacher = state.teacherList.find(
+                          (el) => el.id == v.course_unit_teacher
+                        );
                         return (
                           <tr key={i}>
-                            <td>{codes[0]}</td>
+                            <td>{codes.map((el, code_index) => `${el} `)}</td>
                             <td>{v.course_unit_name}</td>
+                            <td>{teacher.teacher_name}</td>
                             <td>
                               <Button
                                 variant="outlined"
@@ -434,17 +429,6 @@ export default function CoureUnits() {
                                 }}
                               >
                                 Delete
-                              </Button>
-                            </td>
-                            <td>
-                              <Button
-                                variant="outlined"
-                                color="primary"
-                                onClick={() => {
-                                  console.log("Edited");
-                                }}
-                              >
-                                Edit
                               </Button>
                             </td>
                           </tr>

@@ -52,9 +52,9 @@ function Header() {
             style={{ cursor: "pointer" }}
           >
             <img src={Avatar} alt="" width="40px" height="40px" />
-            <div className="">
-              <h4>{user.username || "No user"}</h4>
-              <small>{user.user_role || "No user"}</small>
+            <div className="" style={{ textAlign: "right" }}>
+              <h4>Admin</h4>
+              <small>Dept. 1</small>
             </div>
           </div>
         </div>

@@ -38,12 +38,11 @@ function Header(props) {
           <label htmlFor="nav-toggle">
             <span className="las la-bars"></span>
           </label>
-          <span className="health_unit_name">{props.title || "Blank..."}</span>
+          <span className="health_unit_name">
+            {user.dept_name || "Blank..."}
+          </span>
         </h2>
         <div className="" style={{ display: "flex", alignItems: "center" }}>
-          <div className="" style={{ fontSize: "42px", marginRight: 20 }}>
-            <i className="las la-bell"></i>
-          </div>
           <div
             className="user-wrapper"
             aria-controls="reception-actions"
@@ -52,9 +51,9 @@ function Header(props) {
             style={{ cursor: "pointer" }}
           >
             <img src={Avatar} alt="" width="40px" height="40px" />
-            <div className="">
-              <h4>{user.username || "No user"}</h4>
-              <small>{user.user_role || "No user"}</small>
+            <div className="" style={{ textAlign: "right" }}>
+              <h4>{"HOD"}</h4>
+              <small>{user.dept_number || 1}</small>
             </div>
           </div>
         </div>

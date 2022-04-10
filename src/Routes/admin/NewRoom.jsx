@@ -129,7 +129,7 @@ export default function Rooms() {
       <div className="main-content">
         <Header />
         <main>
-          <div className="recent-grid">
+          <div className="recent-grid-right">
             <div className="projects">
               <form className="card" autoComplete="off" onSubmit={handleSubmit}>
                 <div className="card-header ">

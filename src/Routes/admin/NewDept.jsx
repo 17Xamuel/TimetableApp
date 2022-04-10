@@ -22,26 +22,43 @@ function Alert(props) {
 
 export default function Teachers() {
   const [state, setState] = useState({
-    teacherList: [],
+    dept_pin: "",
+    dept_number: "",
+    deptsList: [],
     mui: {},
-    selectedDays: [],
   });
 
   useEffect(() => {
     (async () => {
       const api = new FormsApi();
-      const res = await api.get("/users/all");
-      if (res !== "Error") {
-        setState({
-          ...state,
-          teacherList: (typeof res.data === "string" ? [] : res) || [],
-        });
+      const res = await api.get("/users/depts/all");
+      if (res !== "Error" && typeof res === "object") {
+        const number = res.length + 1;
+        const check_pin = () => {
+          const random_pin = Math.floor(1000 + Math.random() * 9000);
+          const has_pin = res.find(
+            (el) => parseInt(el.dept_pin) === random_pin
+          );
+          if (has_pin) {
+            check_pin();
+          } else {
+            setState({
+              ...state,
+              deptsList: res,
+              dept_pin: random_pin,
+              dept_number: number,
+            });
+          }
+        };
+        check_pin();
       }
     })();
   }, []);
 
-  // functions
-  const changeSelectedDays = (e, v) => setState({ ...state, selectedDays: v });
+  /**
+   *
+   * functions to this component
+   */
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,9 +76,8 @@ export default function Teachers() {
     form_data.forEach((v, i) => {
       form_contents[i] = v;
     });
-    form_contents["days_available"] = state.selectedDays;
     const api = new FormsApi();
-    const res = await api.post("/users/new", form_contents);
+    const res = await api.post("/users/depts/new", form_contents);
     if (res === "Error") {
       setState({
         ...state,
@@ -90,7 +106,7 @@ export default function Teachers() {
             ...state.mui,
             open: true,
             status: "success",
-            message: "Teacher Added...",
+            message: "New Department Added....",
           },
         });
         window.location.reload();
@@ -132,14 +148,14 @@ export default function Teachers() {
         </Alert>
       </Snackbar>
       <input type="checkbox" id="nav-toggle" defaultChecked />
-      <Nav active="teachers" />
+      <Nav active="depts" />
       <div className="main-content">
         <Header />
         <main>
-          <div className="recent-grid">
+          <div className="recent-grid-left">
             <div className="card">
               <div className="card-header">
-                <h3>Teachers</h3>
+                <h3>Departments</h3>
                 <Button
                   variant="contained"
                   color="primary"
@@ -158,26 +174,26 @@ export default function Teachers() {
                 <table width="100%">
                   <thead>
                     <tr>
-                      <td>No.</td>
-                      <td>Email</td>
-                      <td>Name</td>
-                      <td>Faculty</td>
+                      <td>Dept. Name</td>
+                      <td>Dept. Number</td>
+                      <td>Dept. Faculty</td>
+                      <td>Generated Pin</td>
                       <td></td>
                     </tr>
                   </thead>
                   <tbody>
-                    {state.teacherList.length === 0 ? (
+                    {state.deptsList.length === 0 ? (
                       <tr>
-                        <td>No Teachers To Display</td>
+                        <td>No Departments To Display</td>
                       </tr>
                     ) : (
-                      state.teacherList.map((v, i) => {
+                      state.deptsList.map((v, i) => {
                         return (
                           <tr key={i}>
-                            <td>{i + 1}</td>
-                            <td>{v.user_email}</td>
-                            <td>{v.user_name}</td>
-                            <td>{v.user_faculty}</td>
+                            <td>{v.dept_name}</td>
+                            <td>{v.dept_number}</td>
+                            <td>{v.dept_faculty}</td>
+                            <td>{v.dept_pin}</td>
                             <td>
                               <Button
                                 variant="outlined"
@@ -194,7 +210,7 @@ export default function Teachers() {
                                   });
                                   const api = new FormsApi();
                                   const res = await api.delete(
-                                    `/users/delete/${v.id}`
+                                    `/users/depts/delete/${v.id}`
                                   );
                                   if (res === "Error") {
                                     setState({
@@ -226,7 +242,7 @@ export default function Teachers() {
                                           ...state.mui,
                                           open: true,
                                           status: "success",
-                                          message: "Teacher Deleted...",
+                                          message: "Department Deleted...",
                                         },
                                       });
                                       window.location.reload();
@@ -248,7 +264,7 @@ export default function Teachers() {
             <div className="projects">
               <form className="card" autoComplete="off" onSubmit={handleSubmit}>
                 <div className="card-header ">
-                  <div>Register a New Teacher</div>
+                  <div>Register a New Department</div>
                   <div>
                     <Button
                       type="submit"
@@ -266,30 +282,18 @@ export default function Teachers() {
                 <div className="card-body">
                   <div>
                     <div className="inputCtr">
-                      <h4>Teacher Info</h4>
+                      <h4>Department Info.</h4>
                       <div className="inputs_ctr">
                         <div className="inpts_on_left">
                           <TextField
-                            name="user_name"
+                            name="name"
                             variant="outlined"
-                            label="Teacher's Name"
+                            label="Department Name"
                             style={{
                               width: "85%",
                               margin: "20px",
                             }}
                           />
-                          <TextField
-                            name="user_email"
-                            variant="outlined"
-                            label="Teacher's Email"
-                            helperText="email address for identification"
-                            style={{
-                              width: "85%",
-                              margin: "20px",
-                            }}
-                          />
-                        </div>
-                        <div className="inpts_on_right">
                           <FormControl
                             variant="outlined"
                             label="faculty_name"
@@ -303,7 +307,7 @@ export default function Teachers() {
                             </InputLabel>
                             <Select
                               inputProps={{
-                                name: "user_faculty",
+                                name: "faculty",
                               }}
                               label="Select Faculty"
                               id="select_faculty"
@@ -320,36 +324,27 @@ export default function Teachers() {
                               <MenuItem value="EDUC">EDUC</MenuItem>
                             </Select>
                           </FormControl>
-                          <Autocomplete
-                            limitTags={2}
-                            filterSelectedOptions
-                            onChange={changeSelectedDays}
-                            multiple
-                            getOptionLabel={(opt) => `${opt.v}`}
+                        </div>
+                        <div className="inpts_on_right">
+                          <TextField
+                            name="pin"
+                            variant="outlined"
+                            label="Generated Pin"
+                            value={state.dept_pin || ""}
                             style={{
                               width: "85%",
                               margin: "20px",
                             }}
-                            disablePortal
-                            id="tags-standard"
-                            options={[
-                              { v: "Full Time", i: 7 },
-                              { v: "Monday", i: 0 },
-                              { v: "Tuesday", i: 1 },
-                              { v: "Wednesday", i: 2 },
-                              { v: "Thursday", i: 3 },
-                              { v: "Friday", i: 4 },
-                              { v: "Saturday", i: 5 },
-                              { v: "Sunday", i: 6 },
-                            ]}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                label="Teacher Availability"
-                                variant="outlined"
-                                color="primary"
-                              />
-                            )}
+                          />
+                          <TextField
+                            name="number"
+                            variant="outlined"
+                            label="Department Number"
+                            value={state.dept_number || ""}
+                            style={{
+                              width: "85%",
+                              margin: "20px",
+                            }}
                           />
                         </div>
                       </div>

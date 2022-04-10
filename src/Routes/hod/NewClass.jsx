@@ -14,6 +14,7 @@ import { Autocomplete, Alert as MuiAlert } from "@material-ui/lab";
 import Nav from "./components/Nav";
 import Header from "./components/Header";
 import FormsApi from "../../api/api";
+import dept from "../../app_config";
 
 import "../../design/main.css";
 import "../../design/forms.css";
@@ -49,7 +50,7 @@ export default function Classes() {
   const changeSelectedCourses = (e, v) =>
     setState({ ...state, selectedCourses: v });
 
-  // fucntions
+  // functions
   const handleSubmit = async (e) => {
     e.preventDefault();
     setState({
@@ -141,7 +142,7 @@ export default function Classes() {
       <input type="checkbox" id="nav-toggle" defaultChecked />
       <Nav active="classes" />
       <div className="main-content">
-        <Header title="Computing &amp; Info. Sciences" />
+        <Header />
         <main>
           <div className="recent-grid">
             <div className="card">
@@ -167,7 +168,7 @@ export default function Classes() {
                     <tr>
                       <td>No.</td>
                       <td>Code</td>
-                      <td>Faculty</td>
+                      <td>Study Time</td>
                       <td></td>
                     </tr>
                   </thead>
@@ -182,7 +183,7 @@ export default function Classes() {
                           <tr key={i}>
                             <td>{i + 1}</td>
                             <td>{v.class_code}</td>
-                            <td>{v.faculty}</td>
+                            <td>{v.study_time}</td>
                             <td>
                               <Button
                                 variant="outlined"
@@ -239,16 +240,7 @@ export default function Classes() {
                                   }
                                 }}
                               >
-                                {state.deleteButtonLoading ? (
-                                  <>
-                                    <CircularProgress size={18} />
-                                    <span style={{ marginLeft: 5 }}>
-                                      Deleting...
-                                    </span>
-                                  </>
-                                ) : (
-                                  "Delete Class"
-                                )}
+                                Delete Class
                               </Button>
                             </td>
                           </tr>
@@ -296,6 +288,11 @@ export default function Classes() {
                         }}
                       >
                         <div className="inpts_on_left">
+                          <input
+                            type="hidden"
+                            name="class_dept"
+                            value={dept.id}
+                          />
                           <TextField
                             name="class_code"
                             variant="outlined"
@@ -306,36 +303,6 @@ export default function Classes() {
                               margin: "20px",
                             }}
                           />
-                          <FormControl
-                            variant="outlined"
-                            label="faculty_name"
-                            style={{
-                              width: "85%",
-                              margin: "20px",
-                            }}
-                          >
-                            <InputLabel id="faculty_name">
-                              Select Faculty
-                            </InputLabel>
-                            <Select
-                              inputProps={{
-                                name: "faculty",
-                              }}
-                              label="Select Faculty"
-                              id="select_faculty"
-                              value={state.active_faculty || ""}
-                              onChange={async (e, v) => {
-                                setState({
-                                  ...state,
-                                  active_faculty: e.target.value,
-                                });
-                              }}
-                            >
-                              <MenuItem value="FMS">FMS</MenuItem>
-                              <MenuItem value="FHS">FHS</MenuItem>
-                              <MenuItem value="EDUC">EDUC</MenuItem>
-                            </Select>
-                          </FormControl>
                         </div>
                         <div className="inpts_on_right">
                           <FormControl
@@ -352,7 +319,6 @@ export default function Classes() {
                               inputProps={{
                                 name: "study_time",
                               }}
-                              // helperText="Important!! Either Weekend Or Day"
                               label="Study Time"
                               id="study_time"
                               value={state.active_study_time || ""}

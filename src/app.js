@@ -11,11 +11,11 @@ import Login from "./components/Login";
 import Home from "./home";
 
 export default () => {
-  if (user.role === "admin") {
+  if (user && user.role === "Admin") {
     return <Admin />;
-  } else if (user.role === "hod") {
+  } else if (user && user.role === "HOD") {
     return <Hod />;
-  } else if (user.role === "teacher") {
+  } else if (user && user.role === "teacher") {
     return <Teacher />;
   } else {
     return <HomeStack />;
@@ -27,7 +27,7 @@ const HomeStack = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="login" element={<Login />} />
+        <Route path="check" element={<Login />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </BrowserRouter>

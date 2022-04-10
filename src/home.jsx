@@ -1,6 +1,9 @@
 //react
 import React, { useEffect, useState } from "react";
 
+//router...
+import { Link } from "react-router-dom";
+
 //components
 import TimeTable from "./components/tt";
 
@@ -56,6 +59,9 @@ export default () => {
   return (
     <>
       <div className="home-ctr">
+        <span style={{ position: "absolute", top: "0", right: 0 }}>
+          <Link to="/check">Manage</Link>
+        </span>
         <div className="home-hdr">
           <div>
             <h1>Timetable - Lira University</h1>

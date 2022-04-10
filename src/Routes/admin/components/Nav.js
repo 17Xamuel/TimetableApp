@@ -38,26 +38,14 @@ class Nav extends Component {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/classes">
+                  <Link to="/departments">
                     <span
                       className={`${
-                        this.props.active === "classes" ? "active" : ""
+                        this.props.active === "depts" ? "active" : ""
                       } _a_replaced`}
                     >
                       <span className="las la-user-plus"></span>
-                      <span>Classes</span>
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/teachers">
-                    <span
-                      className={`${
-                        this.props.active === "teachers" ? "active" : ""
-                      } _a_replaced`}
-                    >
-                      <span className="las la-prescription-bottle-alt"></span>
-                      <span>Teachers</span>
+                      <span>Departments</span>
                     </span>
                   </Link>
                 </li>
@@ -68,20 +56,8 @@ class Nav extends Component {
                         this.props.active === "rooms" ? "active" : ""
                       } _a_replaced`}
                     >
-                      <span className="las la-comments-dollar"></span>
+                      <span className="las la-home"></span>
                       <span>Rooms</span>
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/course-units">
-                    <span
-                      className={`${
-                        this.props.active === "course-units" ? "active" : ""
-                      } _a_replaced`}
-                    >
-                      <span className="las la-comment"></span>
-                      <span>Course Units</span>
                     </span>
                   </Link>
                 </li>

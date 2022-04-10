@@ -5,6 +5,7 @@ import Nav from "./components/Nav";
 import Header from "./components/Header";
 import FormsApi from "../../api/api";
 import TimeTable from "../../components/tt";
+import user from "../../app_config";
 
 //styles
 import "../../components/tt.css";
@@ -23,8 +24,7 @@ import {
 
 export default function Dashboard() {
   const [state, setState] = useState({
-    generating: "false",
-    clearing: "false",
+    active_type: "teaching_tt",
     numbers: {},
     mui: {},
     tt: [],
@@ -33,7 +33,7 @@ export default function Dashboard() {
   useEffect(() => {
     (async () => {
       const api = new FormsApi();
-      const res = await api.get("/users/admin/numbers");
+      const res = await api.get(`/users/admin/numbers/${user.id}`);
       if (res !== "Error") {
         setState({
           ...state,
@@ -42,70 +42,14 @@ export default function Dashboard() {
       }
     })();
   }, []);
-
-  const handleClear = async () => {
-    setState({
-      ...state,
-      clearing: "true",
-    });
-    let api = new FormsApi();
-    let clear = await api.put("/users/admin/clear");
-    if (clear !== "Error") {
-      setState({
-        ...state,
-        clearing: "false",
-      });
-      console.log("Cleared");
-    } else {
-      setState({
-        ...state,
-        clearing: "Error",
-      });
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setState({
-      ...state,
-      generating: "true",
-    });
-    const form_data = new FormData(e.target);
-    const form_contents = {};
-    form_data.forEach((v, i) => {
-      form_contents[i] = v;
-    });
-    const api = new FormsApi();
-    const res = await api.post("/users/admin/generate", form_contents);
-    if (res === "Error") {
-      setState({
-        ...state,
-        generating: "Error",
-      });
-    } else {
-      if (res.status === false) {
-        setState({
-          ...state,
-          generating: "Error",
-        });
-      } else {
-        setState({
-          ...state,
-          generating: "false",
-          tt: res.result,
-        });
-      }
-    }
-  };
-
   return (
     <>
       <input type="checkbox" id="nav-toggle" defaultChecked />
       <Nav active="dashboard" />
       <div className="main-content">
-        <Header title="Computing &amp; Info. Sciences" />
+        <Header />
         <main>
-          <div className="cards">
+          <div className="cards cards-3">
             <div className="card-single">
               <div className="">
                 <h3>{state.numbers.teachers || "..."}</h3>
@@ -131,17 +75,6 @@ export default function Dashboard() {
             </div>
             <div className="card-single">
               <div className="">
-                <h3>{state.numbers.rooms || "..."}</h3>
-                <span>Rooms</span>
-                <br />
-                <span style={{ fontSize: "13px" }}>For Lectures</span>
-              </div>
-              <div className="">
-                <span className="las la-users"> </span>
-              </div>
-            </div>
-            <div className="card-single">
-              <div className="">
                 <h3>{state.numbers.classes || "..."}</h3>
                 <span>Classes</span>
                 <br />
@@ -154,6 +87,34 @@ export default function Dashboard() {
           </div>
           <div className="fullwidth-ctr">
             <div className="card">
+              <div>
+                <FormControl
+                  variant="outlined"
+                  style={{
+                    width: "200px",
+                    margin: "20px",
+                  }}
+                >
+                  <InputLabel id="tt_type">Showing For</InputLabel>
+                  <Select
+                    inputProps={{
+                      name: "tt_type",
+                    }}
+                    label="Showing For"
+                    value={state.active_type}
+                    id="tt_type"
+                    onChange={async (e, v) => {
+                      setState({
+                        ...state,
+                        active_type: e.target.value,
+                      });
+                    }}
+                  >
+                    <MenuItem value="teaching_tt">Teaching Timetable</MenuItem>
+                    <MenuItem value="exam_tt">Examination Timetable</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
               <div className="tt-ctr">
                 {state.tt.length === 0 ? (
                   <TimeTable tt={state.tt} />

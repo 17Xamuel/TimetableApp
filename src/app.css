@@ -212,6 +212,9 @@ main {
   background: #f1f5f9;
   min-height: calc(100vh-90px);
 }
+.cards-3{
+  grid-template-columns: repeat(3, 1fr) !important;
+}
 .cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -279,7 +282,9 @@ main {
 .card-header,
 .card-body {
   padding: 1rem;
+
 }
+ 
 .card-body table tr td {
   padding: 15px;
 }
@@ -324,6 +329,9 @@ td {
 @media only screen and (max-width: 1024px) {
   .small-none {
     display: none !important;
+  }
+  .cards-3 {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
   .cards {
     grid-template-columns: repeat(2, 1fr);
@@ -376,6 +384,9 @@ td {
     height: 40px;
     border-radius: 50%;
     text-align: center;
+  }
+  .cards-3 {
+    grid-template-columns: 100% !important;
   }
   .cards {
     grid-template-columns: 100%;
