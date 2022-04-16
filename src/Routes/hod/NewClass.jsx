@@ -34,6 +34,7 @@ export default function Classes() {
     (async () => {
       const api = new FormsApi();
       const res = await api.get("/class/all");
+      console.log(res);
       if (res !== "Error") {
         const courses = await api.get("/course-units/all");
         if (courses !== "Error") {
@@ -179,42 +180,31 @@ export default function Classes() {
                       </tr>
                     ) : (
                       state.classList.map((v, i) => {
-                        return (
-                          <tr key={i}>
-                            <td>{i + 1}</td>
-                            <td>{v.class_code}</td>
-                            <td>{v.study_time}</td>
-                            <td>
-                              <Button
-                                variant="outlined"
-                                color="primary"
-                                onClick={async () => {
-                                  setState({
-                                    ...state,
-                                    mui: {
-                                      ...state.mui,
-                                      open: true,
-                                      status: "info",
-                                      message: "Deleting....",
-                                    },
-                                  });
-                                  const api = new FormsApi();
-                                  const res = await api.delete(
-                                    `/class/delete/${v.id}`
-                                  );
-                                  if (res === "Error") {
+                        if (v.class_dept === dept.id) {
+                          return (
+                            <tr key={i}>
+                              <td>{i + 1}</td>
+                              <td>{v.class_code}</td>
+                              <td>{v.study_time}</td>
+                              <td>
+                                <Button
+                                  variant="outlined"
+                                  color="primary"
+                                  onClick={async () => {
                                     setState({
                                       ...state,
                                       mui: {
                                         ...state.mui,
                                         open: true,
-                                        status: "warning",
-                                        message:
-                                          "Failed to Delete - Network Error",
+                                        status: "info",
+                                        message: "Deleting....",
                                       },
                                     });
-                                  } else {
-                                    if (res.status === false) {
+                                    const api = new FormsApi();
+                                    const res = await api.delete(
+                                      `/class/delete/${v.id}`
+                                    );
+                                    if (res === "Error") {
                                       setState({
                                         ...state,
                                         mui: {
@@ -222,29 +212,44 @@ export default function Classes() {
                                           open: true,
                                           status: "warning",
                                           message:
-                                            "Failed to Delete - Server Error",
+                                            "Failed to Delete - Network Error",
                                         },
                                       });
                                     } else {
-                                      setState({
-                                        ...state,
-                                        mui: {
-                                          ...state.mui,
-                                          open: true,
-                                          status: "success",
-                                          message: "Class Deleted...",
-                                        },
-                                      });
-                                      window.location.reload();
+                                      if (res.status === false) {
+                                        setState({
+                                          ...state,
+                                          mui: {
+                                            ...state.mui,
+                                            open: true,
+                                            status: "warning",
+                                            message:
+                                              "Failed to Delete - Server Error",
+                                          },
+                                        });
+                                      } else {
+                                        setState({
+                                          ...state,
+                                          mui: {
+                                            ...state.mui,
+                                            open: true,
+                                            status: "success",
+                                            message: "Class Deleted...",
+                                          },
+                                        });
+                                        window.location.reload();
+                                      }
                                     }
-                                  }
-                                }}
-                              >
-                                Delete Class
-                              </Button>
-                            </td>
-                          </tr>
-                        );
+                                  }}
+                                >
+                                  Delete Class
+                                </Button>
+                              </td>
+                            </tr>
+                          );
+                        } else {
+                          return;
+                        }
                       })
                     )}
                   </tbody>
@@ -329,8 +334,8 @@ export default function Classes() {
                                 });
                               }}
                             >
-                              <MenuItem value="day">Day</MenuItem>
-                              <MenuItem value="weekend">Weekend</MenuItem>
+                              <MenuItem value="Day">Day</MenuItem>
+                              <MenuItem value="Weekend">Weekend</MenuItem>
                             </Select>
                           </FormControl>
                         </div>

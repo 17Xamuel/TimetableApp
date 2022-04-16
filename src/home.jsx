@@ -150,9 +150,7 @@ export default () => {
                     });
                   }}
                 >
-                  <MenuItem value="FMS">
-                    Classes list after selecting faculty
-                  </MenuItem>
+                  <MenuItem value="FMS">LCS-2</MenuItem>
                 </Select>
               </FormControl>
             </div>

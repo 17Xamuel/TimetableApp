@@ -188,43 +188,32 @@ export default function Teachers() {
                       </tr>
                     ) : (
                       state.deptsList.map((v, i) => {
-                        return (
-                          <tr key={i}>
-                            <td>{v.dept_name}</td>
-                            <td>{v.dept_number}</td>
-                            <td>{v.dept_faculty}</td>
-                            <td>{v.dept_pin}</td>
-                            <td>
-                              <Button
-                                variant="outlined"
-                                color="primary"
-                                onClick={async () => {
-                                  setState({
-                                    ...state,
-                                    mui: {
-                                      ...state.mui,
-                                      open: true,
-                                      status: "info",
-                                      message: "Deleting....",
-                                    },
-                                  });
-                                  const api = new FormsApi();
-                                  const res = await api.delete(
-                                    `/users/depts/delete/${v.id}`
-                                  );
-                                  if (res === "Error") {
+                        if (i !== 0) {
+                          return (
+                            <tr key={i}>
+                              <td>{v.dept_name}</td>
+                              <td>{v.dept_number}</td>
+                              <td>{v.dept_faculty}</td>
+                              <td>{v.dept_pin}</td>
+                              <td>
+                                <Button
+                                  variant="outlined"
+                                  color="primary"
+                                  onClick={async () => {
                                     setState({
                                       ...state,
                                       mui: {
                                         ...state.mui,
                                         open: true,
-                                        status: "warning",
-                                        message:
-                                          "Failed to Delete - Network Error",
+                                        status: "info",
+                                        message: "Deleting....",
                                       },
                                     });
-                                  } else {
-                                    if (res.status === "false") {
+                                    const api = new FormsApi();
+                                    const res = await api.delete(
+                                      `/users/depts/delete/${v.id}`
+                                    );
+                                    if (res === "Error") {
                                       setState({
                                         ...state,
                                         mui: {
@@ -232,29 +221,42 @@ export default function Teachers() {
                                           open: true,
                                           status: "warning",
                                           message:
-                                            "Failed to Delete - Server Error",
+                                            "Failed to Delete - Network Error",
                                         },
                                       });
                                     } else {
-                                      setState({
-                                        ...state,
-                                        mui: {
-                                          ...state.mui,
-                                          open: true,
-                                          status: "success",
-                                          message: "Department Deleted...",
-                                        },
-                                      });
-                                      window.location.reload();
+                                      if (res.status === "false") {
+                                        setState({
+                                          ...state,
+                                          mui: {
+                                            ...state.mui,
+                                            open: true,
+                                            status: "warning",
+                                            message:
+                                              "Failed to Delete - Server Error",
+                                          },
+                                        });
+                                      } else {
+                                        setState({
+                                          ...state,
+                                          mui: {
+                                            ...state.mui,
+                                            open: true,
+                                            status: "success",
+                                            message: "Department Deleted...",
+                                          },
+                                        });
+                                        window.location.reload();
+                                      }
                                     }
-                                  }
-                                }}
-                              >
-                                Delete
-                              </Button>
-                            </td>
-                          </tr>
-                        );
+                                  }}
+                                >
+                                  Delete
+                                </Button>
+                              </td>
+                            </tr>
+                          );
+                        }
                       })
                     )}
                   </tbody>

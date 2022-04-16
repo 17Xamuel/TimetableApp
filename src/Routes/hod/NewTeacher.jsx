@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   TextField,
   Snackbar,
@@ -23,11 +23,19 @@ function Alert(props) {
 
 export default function Teachers() {
   const [state, setState] = useState({
+    active_edit: {},
     teacherList: [],
     mui: {},
     selectedDays: [],
     generated_pin: "",
   });
+
+  /**
+   *
+   * refs
+   */
+
+  const editRef = useRef();
 
   useEffect(() => {
     (async () => {
@@ -59,6 +67,10 @@ export default function Teachers() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (state.active_edit.edit) {
+      await handleEdit(e);
+      return;
+    }
     setState({
       ...state,
       mui: {
@@ -105,6 +117,60 @@ export default function Teachers() {
             open: true,
             status: "success",
             message: "Teacher Added...",
+          },
+        });
+        window.location.reload();
+      }
+    }
+  };
+
+  const handleEdit = async (e) => {
+    setState({
+      ...state,
+      mui: {
+        ...state.mui,
+        open: true,
+        status: "info",
+        message: "Editing...",
+      },
+    });
+    const form_data = new FormData(e.target);
+    const form_contents = {};
+    form_data.forEach((v, i) => {
+      form_contents[i] = v;
+    });
+    form_contents["days_available"] = state.selectedDays;
+    const api = new FormsApi();
+    const res = await api.post("/users/teacher/edit", form_contents);
+    if (res === "Error") {
+      setState({
+        ...state,
+        mui: {
+          ...state.mui,
+          open: true,
+          status: "warning",
+          message: "Some Error Occured...",
+        },
+      });
+    } else {
+      if (res.status === false) {
+        setState({
+          ...state,
+          mui: {
+            ...state.mui,
+            open: true,
+            status: "warning",
+            message: res.data,
+          },
+        });
+      } else {
+        setState({
+          ...state,
+          mui: {
+            ...state.mui,
+            open: true,
+            status: "success",
+            message: "Edit Successfull...",
           },
         });
         window.location.reload();
@@ -185,42 +251,44 @@ export default function Teachers() {
                       </tr>
                     ) : (
                       state.teacherList.map((v, i) => {
-                        return (
-                          <tr key={i}>
-                            <td>{i + 1}</td>
-                            <td>{v.teacher_name}</td>
-                            <td>{v.teacher_pin}</td>
-                            <td>
-                              <Button
-                                variant="outlined"
-                                color="primary"
-                                onClick={async () => {
-                                  setState({
-                                    ...state,
-                                    mui: {
-                                      ...state.mui,
-                                      open: true,
-                                      status: "info",
-                                      message: "Deleting....",
-                                    },
-                                  });
-                                  const api = new FormsApi();
-                                  const res = await api.delete(
-                                    `/users/teacher/delete/${v.id}`
-                                  );
-                                  if (res === "Error") {
+                        if (v.teacher_dept === dept.id) {
+                          return (
+                            <tr key={i}>
+                              <td>{i + 1}</td>
+                              <td>{v.teacher_name}</td>
+                              <td>{v.teacher_pin}</td>
+                              <td>
+                                <Button
+                                  onClick={() => {
+                                    // editRef.current.focus();
+                                    setState({
+                                      ...state,
+                                      active_edit: { ...v, edit: true },
+                                    });
+                                  }}
+                                >
+                                  Edit
+                                </Button>
+                              </td>
+                              <td>
+                                <Button
+                                  variant="outlined"
+                                  color="primary"
+                                  onClick={async () => {
                                     setState({
                                       ...state,
                                       mui: {
                                         ...state.mui,
                                         open: true,
-                                        status: "warning",
-                                        message:
-                                          "Failed to Delete - Network Error",
+                                        status: "info",
+                                        message: "Deleting....",
                                       },
                                     });
-                                  } else {
-                                    if (res.status === "false") {
+                                    const api = new FormsApi();
+                                    const res = await api.delete(
+                                      `/users/teacher/delete/${v.id}`
+                                    );
+                                    if (res === "Error") {
                                       setState({
                                         ...state,
                                         mui: {
@@ -228,29 +296,44 @@ export default function Teachers() {
                                           open: true,
                                           status: "warning",
                                           message:
-                                            "Failed to Delete - Server Error",
+                                            "Failed to Delete - Network Error",
                                         },
                                       });
                                     } else {
-                                      setState({
-                                        ...state,
-                                        mui: {
-                                          ...state.mui,
-                                          open: true,
-                                          status: "success",
-                                          message: "Teacher Deleted...",
-                                        },
-                                      });
-                                      window.location.reload();
+                                      if (res.status === "false") {
+                                        setState({
+                                          ...state,
+                                          mui: {
+                                            ...state.mui,
+                                            open: true,
+                                            status: "warning",
+                                            message:
+                                              "Failed to Delete - Server Error",
+                                          },
+                                        });
+                                      } else {
+                                        setState({
+                                          ...state,
+                                          mui: {
+                                            ...state.mui,
+                                            open: true,
+                                            status: "success",
+                                            message: "Teacher Deleted...",
+                                          },
+                                        });
+                                        window.location.reload();
+                                      }
                                     }
-                                  }
-                                }}
-                              >
-                                Delete
-                              </Button>
-                            </td>
-                          </tr>
-                        );
+                                  }}
+                                >
+                                  Delete
+                                </Button>
+                              </td>
+                            </tr>
+                          );
+                        } else {
+                          return;
+                        }
                       })
                     )}
                   </tbody>
@@ -277,69 +360,160 @@ export default function Teachers() {
                 </div>
                 <div className="card-body">
                   <div>
-                    <div className="inputCtr">
-                      <h4>Teacher Info</h4>
-                      <div className="inputs_ctr">
-                        <div className="inpts_on_left">
-                          <TextField
-                            name="teacher_name"
-                            variant="outlined"
-                            label="Teacher's Full Name"
-                            style={{
-                              width: "85%",
-                              margin: "20px",
-                            }}
-                          />
-                          <TextField
-                            name="teacher_pin"
-                            variant="outlined"
-                            value={state.generated_pin}
-                            label="Generated Pin"
-                            helperText="That will be used to access timetable"
-                            style={{
-                              width: "85%",
-                              margin: "20px",
-                            }}
-                          />
-                          <Autocomplete
-                            limitTags={2}
-                            filterSelectedOptions
-                            onChange={changeSelectedDays}
-                            multiple
-                            getOptionLabel={(opt) => `${opt.v}`}
-                            style={{
-                              width: "85%",
-                              margin: "20px",
-                            }}
-                            disablePortal
-                            id="tags-standard"
-                            options={[
-                              { v: "Full Time", i: 7 },
-                              { v: "Monday", i: 0 },
-                              { v: "Tuesday", i: 1 },
-                              { v: "Wednesday", i: 2 },
-                              { v: "Thursday", i: 3 },
-                              { v: "Friday", i: 4 },
-                              { v: "Saturday", i: 5 },
-                              { v: "Sunday", i: 6 },
-                            ]}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                label="Teacher Availability"
-                                variant="outlined"
-                                color="primary"
-                              />
-                            )}
-                          />
-                          <input
-                            type="hidden"
-                            name="teacher_dept"
-                            value={dept.id}
-                          />
+                    {state.active_edit.edit ? (
+                      <div className="inputCtr">
+                        <h4>Teacher Info</h4>
+                        <div className="inputs_ctr">
+                          <div className="inpts_on_left">
+                            <input
+                              type="hidden"
+                              name="teacher_id"
+                              value={state.active_edit.id}
+                            />
+                            <TextField
+                              ref={editRef}
+                              name="teacher_name"
+                              value={state.active_edit.teacher_name}
+                              onChange={(e) => {
+                                setState({
+                                  ...state,
+                                  active_edit: {
+                                    ...state.active_edit,
+                                    teacher_name: e.target.value,
+                                  },
+                                });
+                              }}
+                              variant="outlined"
+                              label="Teacher's Full Name"
+                              style={{
+                                width: "85%",
+                                margin: "20px",
+                              }}
+                            />
+                            <TextField
+                              name="teacher_pin"
+                              value={state.active_edit.teacher_pin}
+                              onChange={(e) => {
+                                setState({
+                                  ...state,
+                                  active_edit: {
+                                    ...state.active_edit,
+                                    teacher_pin: e.target.value,
+                                  },
+                                });
+                              }}
+                              variant="outlined"
+                              label="Current Pin"
+                              helperText="That will be used to access timetable"
+                              style={{
+                                width: "85%",
+                                margin: "20px",
+                              }}
+                            />
+                            <Autocomplete
+                              limitTags={2}
+                              filterSelectedOptions
+                              onChange={changeSelectedDays}
+                              multiple
+                              getOptionLabel={(opt) => `${opt.v}`}
+                              style={{
+                                width: "85%",
+                                margin: "20px",
+                              }}
+                              disablePortal
+                              id="tags-standard"
+                              options={[
+                                { v: "Full Time", i: 7 },
+                                { v: "Monday", i: 0 },
+                                { v: "Tuesday", i: 1 },
+                                { v: "Wednesday", i: 2 },
+                                { v: "Thursday", i: 3 },
+                                { v: "Friday", i: 4 },
+                                { v: "Saturday", i: 5 },
+                                { v: "Sunday", i: 6 },
+                              ]}
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  label="Teacher Availability"
+                                  variant="outlined"
+                                  color="primary"
+                                />
+                              )}
+                            />
+                            <input
+                              type="hidden"
+                              name="teacher_dept"
+                              value={dept.id}
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="inputCtr">
+                        <h4>Teacher Info</h4>
+                        <div className="inputs_ctr">
+                          <div className="inpts_on_left">
+                            <TextField
+                              name="teacher_name"
+                              variant="outlined"
+                              label="Teacher's Full Name"
+                              style={{
+                                width: "85%",
+                                margin: "20px",
+                              }}
+                            />
+                            <TextField
+                              name="teacher_pin"
+                              variant="outlined"
+                              value={state.generated_pin}
+                              label="Generated Pin"
+                              helperText="That will be used to access timetable"
+                              style={{
+                                width: "85%",
+                                margin: "20px",
+                              }}
+                            />
+                            <Autocomplete
+                              limitTags={2}
+                              filterSelectedOptions
+                              onChange={changeSelectedDays}
+                              multiple
+                              getOptionLabel={(opt) => `${opt.v}`}
+                              style={{
+                                width: "85%",
+                                margin: "20px",
+                              }}
+                              disablePortal
+                              id="tags-standard"
+                              options={[
+                                { v: "Full Time", i: 7 },
+                                { v: "Monday", i: 0 },
+                                { v: "Tuesday", i: 1 },
+                                { v: "Wednesday", i: 2 },
+                                { v: "Thursday", i: 3 },
+                                { v: "Friday", i: 4 },
+                                { v: "Saturday", i: 5 },
+                                { v: "Sunday", i: 6 },
+                              ]}
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  label="Teacher Availability"
+                                  variant="outlined"
+                                  color="primary"
+                                />
+                              )}
+                            />
+                            <input
+                              type="hidden"
+                              name="teacher_dept"
+                              value={dept.id}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </form>

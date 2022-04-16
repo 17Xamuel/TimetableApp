@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Nav from "./components/Nav";
 import Header from "./components/Header";
 import FormsApi from "../../api/api";
+import dept from "../../app_config";
 import TimeTable from "../../components/tt";
 
 //styles
@@ -33,11 +34,13 @@ export default function Dashboard() {
   useEffect(() => {
     (async () => {
       const api = new FormsApi();
-      const res = await api.get("/users/admin/numbers");
+      const res = await api.get(`/users/admin/numbers/${dept.id}`);
       if (res !== "Error") {
+        console.log(res.result);
         setState({
           ...state,
           numbers: (res.status === false ? {} : res.result) || {},
+          tt: res.result.tt.timetable,
         });
       }
     })();
@@ -51,11 +54,13 @@ export default function Dashboard() {
     let api = new FormsApi();
     let clear = await api.put("/users/admin/clear");
     if (clear !== "Error") {
-      setState({
-        ...state,
-        clearing: "false",
-      });
-      console.log("Cleared");
+      if (clear.status) {
+        setState({
+          ...state,
+          clearing: "false",
+        });
+        window.location.reload();
+      }
     } else {
       setState({
         ...state,
@@ -77,7 +82,6 @@ export default function Dashboard() {
     });
     const api = new FormsApi();
     const res = await api.post("/users/admin/generate", form_contents);
-    console.log(res.result);
     if (res === "Error") {
       setState({
         ...state,
@@ -93,8 +97,8 @@ export default function Dashboard() {
         setState({
           ...state,
           generating: "false",
-          tt: res.result,
         });
+        window.location.reload();
       }
     }
   };
@@ -155,10 +159,10 @@ export default function Dashboard() {
           </div>
           <div className="fullwidth-ctr">
             <div className="card">
-              <form onSubmit={handleSubmit} className="admin-tt-config">
+              <div className="admin-tt-config">
                 <div>
                   <div>TimeTable Configuration</div>
-                  <div>
+                  <form onSubmit={handleSubmit}>
                     <TextField
                       variant="outlined"
                       color="primary"
@@ -195,6 +199,7 @@ export default function Dashboard() {
                     <br />
                     <Button
                       type="submit"
+                      disabled={state.tt.length > 0}
                       variant={
                         state.generating === "false" ? "contained" : "outlined"
                       }
@@ -226,7 +231,7 @@ export default function Dashboard() {
                           : "Generate"}
                       </span>
                     </Button>
-                  </div>
+                  </form>
                 </div>
                 <div>
                   <div>Clear Timetable</div>
@@ -238,6 +243,7 @@ export default function Dashboard() {
                       color={
                         state.clearing === "Error" ? "secondary" : "primary"
                       }
+                      disabled={state.tt.length < 1}
                       size="large"
                       onClick={handleClear}
                       style={{
@@ -266,7 +272,7 @@ export default function Dashboard() {
                     </Button>
                   </div>
                 </div>
-              </form>
+              </div>
               <div className="tt-ctr">
                 {state.tt.length === 0 ? (
                   <TimeTable tt={state.tt} />

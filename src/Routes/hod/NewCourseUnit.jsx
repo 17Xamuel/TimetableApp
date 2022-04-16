@@ -38,25 +38,37 @@ export default function CoureUnits() {
     //teachers
     (async () => {
       const api = new FormsApi();
-      const users = await api.get("/users/all");
-      if (users !== "Error") {
-        const rooms = await api.get("/rooms/all");
-        if (rooms !== "Error") {
-          const courses = await api.get("/course-units/all");
-          if (courses !== "Error") {
-            const classes = await api.get("/class/all");
-            if (classes !== "Error") {
-              setState({
-                ...state,
-                classList: (typeof classes === "string" ? [] : classes) || [],
-                courseUnitList:
-                  (typeof courses === "string" ? [] : courses) || [],
-                roomsList: (typeof rooms === "string" ? [] : rooms) || [],
-                teacherList: (typeof users === "string" ? [] : users) || [],
-              });
-            }
-          }
-        }
+      const users = await api.get("/users/teachers/all");
+      const rooms = await api.get("/rooms/all");
+      const courses = await api.get("/course-units/all");
+      const classes = await api.get("/class/all");
+
+      console.log(users);
+      console.log(rooms);
+      console.log(courses);
+      console.log(classes);
+
+      if (
+        users !== "Error" &&
+        rooms !== "Error" &&
+        courses !== "Error" &&
+        classes !== "Error"
+      ) {
+        setState({
+          ...state,
+          classList: classes,
+          courseUnitList: courses,
+          roomsList: rooms,
+          teacherList: users,
+        });
+      } else {
+        setState({
+          ...state,
+          classList: [],
+          courseUnitList: [],
+          roomsList: [],
+          teacherList: [],
+        });
       }
     })();
   }, []);
@@ -363,7 +375,7 @@ export default function CoureUnits() {
                                 state.teacherList.map((v, i) => {
                                   return (
                                     <MenuItem value={v.id} key={i}>
-                                      {v.user_name}
+                                      {v.teacher_name}
                                     </MenuItem>
                                   );
                                 })
@@ -412,27 +424,80 @@ export default function CoureUnits() {
                     ) : (
                       state.courseUnitList.map((v, i) => {
                         let codes = JSON.parse(v.course_unit_codes);
-                        let teacher = state.teacherList.find(
-                          (el) => el.id == v.course_unit_teacher
-                        );
-                        return (
-                          <tr key={i}>
-                            <td>{codes.map((el, code_index) => `${el} `)}</td>
-                            <td>{v.course_unit_name}</td>
-                            <td>{teacher.teacher_name}</td>
-                            <td>
-                              <Button
-                                variant="outlined"
-                                color="secondary"
-                                onClick={() => {
-                                  console.log("Deleted");
-                                }}
-                              >
-                                Delete
-                              </Button>
-                            </td>
-                          </tr>
-                        );
+                        let teacher =
+                          state.teacherList.find(
+                            (el) => el.id === v.course_unit_teacher
+                          ) || {};
+                        if (v.course_unit_dept === dept.id) {
+                          return (
+                            <tr key={i}>
+                              <td>{codes.map((el, code_index) => `${el} `)}</td>
+                              <td>{v.course_unit_name}</td>
+                              <td>{teacher.teacher_name}</td>
+                              <td>
+                                <Button
+                                  variant="outlined"
+                                  color="secondary"
+                                  onClick={async () => {
+                                    setState({
+                                      ...state,
+                                      mui: {
+                                        ...state.mui,
+                                        open: true,
+                                        status: "info",
+                                        message: "Deleting....",
+                                      },
+                                    });
+                                    const api = new FormsApi();
+                                    const res = await api.delete(
+                                      `/course-units/${v.id}`
+                                    );
+                                    if (res === "Error") {
+                                      setState({
+                                        ...state,
+                                        mui: {
+                                          ...state.mui,
+                                          open: true,
+                                          status: "warning",
+                                          message:
+                                            "Failed to Delete - Network Error",
+                                        },
+                                      });
+                                    } else {
+                                      if (res.status === false) {
+                                        setState({
+                                          ...state,
+                                          mui: {
+                                            ...state.mui,
+                                            open: true,
+                                            status: "warning",
+                                            message:
+                                              "Failed to Delete - Server Error",
+                                          },
+                                        });
+                                      } else {
+                                        setState({
+                                          ...state,
+                                          mui: {
+                                            ...state.mui,
+                                            open: true,
+                                            status: "success",
+                                            message: "Course Unit Deleted...",
+                                          },
+                                        });
+                                        window.location.reload();
+                                      }
+                                    }
+                                  }}
+                                >
+                                  Delete
+                                </Button>
+                              </td>
+                            </tr>
+                          );
+                        } else {
+                          return;
+                        }
                       })
                     )}
                   </tbody>

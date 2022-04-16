@@ -129,7 +129,30 @@ export default function Teachers() {
       <div className="main-content">
         <Header />
         <main>
-          <div className="recent-grid">Exam things here</div>
+          <div className="recent-grid">
+            <div className="card"></div>
+
+            <thead>
+              <tr>
+                <td>No.</td>
+                <td>Code</td>
+                <td>Study Time</td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+              {[1, 2, 3, 4].map((el, i) => {
+                return (
+                  <tr key={i}>
+                    <td>No.</td>
+                    <td>Code</td>
+                    <td>Study Time</td>
+                    <td></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </div>
         </main>
       </div>
     </>
