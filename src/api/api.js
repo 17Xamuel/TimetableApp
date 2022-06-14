@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const url = "http://192.168.31.70:3030/api";
-// const url = "https://freedomhealth.herokuapp.com/api";
+const url = "http://192.168.1.180:3030/api";
 
 export default class FormsApi {
   async post(i, data) {

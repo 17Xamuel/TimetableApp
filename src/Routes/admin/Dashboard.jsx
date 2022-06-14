@@ -34,13 +34,12 @@ export default function Dashboard() {
   useEffect(() => {
     (async () => {
       const api = new FormsApi();
-      const res = await api.get(`/users/admin/numbers/${dept.id}`);
+      const res = await api.get(`/users/admin/numbers`);
       if (res !== "Error") {
-        console.log(res.result);
         setState({
           ...state,
           numbers: (res.status === false ? {} : res.result) || {},
-          tt: res.result.tt.timetable,
+          tt: res.result.tt.length === 0 ? [] : JSON.parse(res.result.tt[0].tt),
         });
       }
     })();
@@ -113,7 +112,11 @@ export default function Dashboard() {
           <div className="cards">
             <div className="card-single">
               <div className="">
-                <h3>{state.numbers.teachers || "..."}</h3>
+                <h3>
+                  {state.numbers.teachers
+                    ? state.numbers.teachers.length
+                    : "..."}
+                </h3>
                 <span>
                   Teachers <br />
                   <span style={{ fontSize: "13px" }}>Registered in System</span>
@@ -125,7 +128,11 @@ export default function Dashboard() {
             </div>
             <div className="card-single">
               <div className="">
-                <h3>{state.numbers.course_units || "..."}</h3>
+                <h3>
+                  {state.numbers.course_units
+                    ? state.numbers.course_units.length
+                    : "..."}
+                </h3>
                 <span>Course Units</span>
                 <br />
                 <span style={{ fontSize: "13px" }}>Being Taught</span>
@@ -136,7 +143,9 @@ export default function Dashboard() {
             </div>
             <div className="card-single">
               <div className="">
-                <h3>{state.numbers.rooms || "..."}</h3>
+                <h3>
+                  {state.numbers.rooms ? state.numbers.rooms.length : "..."}
+                </h3>
                 <span>Rooms</span>
                 <br />
                 <span style={{ fontSize: "13px" }}>For Lectures</span>
@@ -147,7 +156,9 @@ export default function Dashboard() {
             </div>
             <div className="card-single">
               <div className="">
-                <h3>{state.numbers.classes || "..."}</h3>
+                <h3>
+                  {state.numbers.classes ? state.numbers.classes.length : "..."}
+                </h3>
                 <span>Classes</span>
                 <br />
                 <span style={{ fontSize: "13px" }}>In the System</span>
@@ -274,11 +285,13 @@ export default function Dashboard() {
                 </div>
               </div>
               <div className="tt-ctr">
-                {state.tt.length === 0 ? (
-                  <TimeTable tt={state.tt} />
-                ) : (
-                  <TimeTable tt={state.tt} />
-                )}
+                <TimeTable
+                  tt={state.tt}
+                  user={dept}
+                  filter_level="Admin"
+                  teachers={state.numbers.teachers}
+                  rooms={state.numbers.rooms}
+                />
               </div>
             </div>
           </div>

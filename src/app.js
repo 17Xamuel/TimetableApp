@@ -15,8 +15,6 @@ export default () => {
     return <Admin />;
   } else if (user && user.role === "HOD") {
     return <Hod />;
-  } else if (user && user.role === "teacher") {
-    return <Teacher />;
   } else {
     return <HomeStack />;
   }
@@ -28,6 +26,7 @@ const HomeStack = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="check" element={<Login />} />
+        <Route path="teacher" element={<Teacher />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </BrowserRouter>

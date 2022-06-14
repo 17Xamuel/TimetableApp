@@ -156,6 +156,7 @@ export default function Rooms() {
                         <div className="inpts_on_left">
                           <TextField
                             name="room_name"
+                            type="text"
                             variant="outlined"
                             label="Room Name"
                             style={{
@@ -223,6 +224,7 @@ export default function Rooms() {
                               <MenuItem value="FMS">FMS</MenuItem>
                               <MenuItem value="FHS">FHS</MenuItem>
                               <MenuItem value="EDUC">EDUC</MenuItem>
+                              <MenuItem value="Medicine">Medicine</MenuItem>
                             </Select>
                           </FormControl>
                         </div>

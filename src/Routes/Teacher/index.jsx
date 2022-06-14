@@ -22,31 +22,32 @@ import {
 import FormsApi from "../../api/api";
 
 export default () => {
-  const [state, setState] = useState({ tt: [] });
+  const [state, setState] = useState({
+    tt: [],
+    generate: false,
+    active_tt_type: "teaching",
+    teacher_pin: "...",
+    numbers: {},
+    teacher: {},
+  });
 
   useEffect(() => {
     document.body.style.backgroundColor = "#fff";
   }, []);
 
-  const generate = async () => {
+  const getTeacherTimetable = async () => {
+    setState({ ...state, generate: true });
     const api = new FormsApi();
-    const res = await api.post("/users/admin/generate", {});
-    if (res === "Error") {
-      setState({
-        ...state,
-        generate: "Error",
-      });
-    } else {
-      if (res.status === false) {
+    const res = await api.get(`/users/admin/numbers`);
+    if (res !== "Error") {
+      if (res.status !== false) {
         setState({
           ...state,
-          generating: "Error",
-        });
-      } else {
-        setState({
-          ...state,
-          generate: false,
-          tt: res.result,
+          numbers: res.result || {},
+          tt: res.result.tt.length === 0 ? [] : JSON.parse(res.result.tt[0].tt),
+          teacher: res.result.teachers.find(
+            (el) => el.teacher_pin === state.teacher_pin
+          ),
         });
       }
     }
@@ -58,11 +59,29 @@ export default () => {
         <div className="teacher-hdr">
           <div>
             <h1>Timetable - Lira University</h1>
-            <div>Generate staff Teaching/Exam Supervsion Timetable</div>
+            <div>Generate staff Teaching</div>
           </div>
           <div style={{ textAlign: "right" }}>
-            <h1>{"..."}</h1>
-            <div>Available Days: ...</div>
+            <h1>{state.teacher.teacher_name}</h1>
+            <div>
+              Available Days:
+              {state.teacher.teacher_available_days
+                ? JSON.parse(state.teacher.teacher_available_days).map(
+                    (el, i) => {
+                      if (
+                        i ===
+                        JSON.parse(state.teacher.teacher_available_days)
+                          .length -
+                          1
+                      ) {
+                        return <span key={i}>{` ${el.v}`}</span>;
+                      } else {
+                        return <span key={i}>{` ${el.v},`}</span>;
+                      }
+                    }
+                  )
+                : ""}
+            </div>
           </div>
         </div>
         <div className="teacher-body">
@@ -73,6 +92,9 @@ export default () => {
                 style={{ width: "256px" }}
                 label="Pin"
                 type="number"
+                onChange={(e) => {
+                  setState({ ...state, teacher_pin: e.target.value });
+                }}
               />
             </div>
             <div>
@@ -86,7 +108,7 @@ export default () => {
                   id="select_tt_type"
                   value={state.active_tt_type || ""}
                   style={{ width: "256px" }}
-                  onChange={async (e, v) => {
+                  onChange={(e, v) => {
                     setState({
                       ...state,
                       active_tt_type: e.target.value,
@@ -94,7 +116,7 @@ export default () => {
                   }}
                 >
                   <MenuItem value="teaching">Teaching TimeTable</MenuItem>
-                  <MenuItem value="exam">Exam Supervision TimeTable</MenuItem>
+                  {/* <MenuItem value="exam">Exam Supervision TimeTable</MenuItem> */}
                 </Select>
               </FormControl>
             </div>
@@ -103,9 +125,7 @@ export default () => {
                 variant="contained"
                 color="primary"
                 style={{ marginRight: "32px" }}
-                onClick={() => {
-                  window.location.reload();
-                }}
+                onClick={getTeacherTimetable}
               >
                 Generate
               </Button>
@@ -123,14 +143,22 @@ export default () => {
           </div>
           <div className="teacher-body-tt-ctr tt-ctr">
             {state.generate ? (
-              <div className="">
-                <CircularProgress size={15} />
-                <span style={{ margin: "10px" }}>Generating....</span>
-              </div>
-            ) : state.tt.length === 0 ? (
-              <span style={{ margin: "10px" }}>No timetable Generated</span>
+              state.tt.length !== 0 ? (
+                <TimeTable
+                  tt={state.tt}
+                  teacher_pin={state.teacher.teacher_pin || 0}
+                  filter_level="Teacher"
+                  teachers={state.numbers.teachers}
+                  rooms={state.numbers.rooms}
+                />
+              ) : (
+                <div className="">
+                  <CircularProgress size={15} />
+                  <span style={{ margin: "10px" }}>Generating....</span>
+                </div>
+              )
             ) : (
-              <TimeTable tt={state.tt} />
+              <span style={{ margin: "10px" }}>No timetable Generated</span>
             )}
           </div>
         </div>

@@ -211,7 +211,7 @@ function Login() {
                 }
                 variant="outlined"
                 label="Pin"
-                type="text"
+                type="password"
                 name="pin"
                 fullWidth
                 style={{ margin: "20px 0px" }}

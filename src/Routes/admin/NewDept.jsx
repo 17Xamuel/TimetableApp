@@ -85,7 +85,7 @@ export default function Teachers() {
           ...state.mui,
           open: true,
           status: "warning",
-          message: "Some Error Occured...",
+          message: "Network Error, Check Connection",
         },
       });
     } else {
@@ -289,6 +289,7 @@ export default function Teachers() {
                         <div className="inpts_on_left">
                           <TextField
                             name="name"
+                            type="text"
                             variant="outlined"
                             label="Department Name"
                             style={{
@@ -324,6 +325,7 @@ export default function Teachers() {
                               <MenuItem value="FMS">FMS</MenuItem>
                               <MenuItem value="FHS">FHS</MenuItem>
                               <MenuItem value="EDUC">EDUC</MenuItem>
+                              <MenuItem value="Medicine">Medicine</MenuItem>
                             </Select>
                           </FormControl>
                         </div>
