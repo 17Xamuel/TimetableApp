@@ -62,9 +62,9 @@ export default ({
                                 <span style={{ color: "1231fd" }}>
                                   {teacher.teacher_name}
                                 </span>
-                                <span style={{ color: "fd1231" }}>
+                                {/* <span style={{ color: "fd1231" }}>
                                   {room.room_name}
-                                </span>
+                                </span> */}
                               </div>
                             );
                           } else {
@@ -95,9 +95,9 @@ export default ({
                                     <div style={{ color: "#1231fd" }}>
                                       {teacher.teacher_name}
                                     </div>
-                                    <span style={{ color: "#fd1231" }}>
+                                    {/* <span style={{ color: "#fd1231" }}>
                                       {room.room_name}
-                                    </span>
+                                    </span> */}
                                   </div>
                                 </div>
                               );
@@ -142,9 +142,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );
@@ -182,9 +182,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );
@@ -232,9 +232,9 @@ export default ({
                                 <span style={{ color: "1231fd" }}>
                                   {teacher.teacher_name}
                                 </span>
-                                <span style={{ color: "fd1231" }}>
+                                {/* <span style={{ color: "fd1231" }}>
                                   {room.room_name}
-                                </span>
+                                </span> */}
                               </div>
                             );
                           } else {
@@ -265,9 +265,9 @@ export default ({
                                     <div style={{ color: "#1231fd" }}>
                                       {teacher.teacher_name}
                                     </div>
-                                    <span style={{ color: "#fd1231" }}>
+                                    {/* <span style={{ color: "#fd1231" }}>
                                       {room.room_name}
-                                    </span>
+                                    </span> */}
                                   </div>
                                 </div>
                               );
@@ -352,9 +352,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );
@@ -402,9 +402,9 @@ export default ({
                                 <span style={{ color: "1231fd" }}>
                                   {teacher.teacher_name}
                                 </span>
-                                <span style={{ color: "fd1231" }}>
+                                {/* <span style={{ color: "fd1231" }}>
                                   {room.room_name}
-                                </span>
+                                </span> */}
                               </div>
                             );
                           } else {
@@ -435,9 +435,9 @@ export default ({
                                     <div style={{ color: "#1231fd" }}>
                                       {teacher.teacher_name}
                                     </div>
-                                    <span style={{ color: "#fd1231" }}>
+                                    {/* <span style={{ color: "#fd1231" }}>
                                       {room.room_name}
-                                    </span>
+                                    </span> */}
                                   </div>
                                 </div>
                               );
@@ -482,9 +482,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );
@@ -522,9 +522,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );
@@ -572,9 +572,9 @@ export default ({
                                 <span style={{ color: "1231fd" }}>
                                   {teacher.teacher_name}
                                 </span>
-                                <span style={{ color: "fd1231" }}>
+                                {/* <span style={{ color: "fd1231" }}>
                                   {room.room_name}
-                                </span>
+                                </span> */}
                               </div>
                             );
                           } else {
@@ -605,9 +605,9 @@ export default ({
                                     <div style={{ color: "#1231fd" }}>
                                       {teacher.teacher_name}
                                     </div>
-                                    <span style={{ color: "#fd1231" }}>
+                                    {/* <span style={{ color: "#fd1231" }}>
                                       {room.room_name}
-                                    </span>
+                                    </span> */}
                                   </div>
                                 </div>
                               );
@@ -652,9 +652,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );
@@ -692,9 +692,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );
@@ -742,9 +742,9 @@ export default ({
                                 <span style={{ color: "1231fd" }}>
                                   {teacher.teacher_name}
                                 </span>
-                                <span style={{ color: "fd1231" }}>
+                                {/* <span style={{ color: "fd1231" }}>
                                   {room.room_name}
-                                </span>
+                                </span> */}
                               </div>
                             );
                           } else {
@@ -775,9 +775,9 @@ export default ({
                                     <div style={{ color: "#1231fd" }}>
                                       {teacher.teacher_name}
                                     </div>
-                                    <span style={{ color: "#fd1231" }}>
+                                    {/* <span style={{ color: "#fd1231" }}>
                                       {room.room_name}
-                                    </span>
+                                    </span> */}
                                   </div>
                                 </div>
                               );
@@ -822,9 +822,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );
@@ -862,9 +862,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );
@@ -912,9 +912,9 @@ export default ({
                                 <span style={{ color: "1231fd" }}>
                                   {teacher.teacher_name}
                                 </span>
-                                <span style={{ color: "fd1231" }}>
+                                {/* <span style={{ color: "fd1231" }}>
                                   {room.room_name}
-                                </span>
+                                </span> */}
                               </div>
                             );
                           } else {
@@ -945,9 +945,9 @@ export default ({
                                     <div style={{ color: "#1231fd" }}>
                                       {teacher.teacher_name}
                                     </div>
-                                    <span style={{ color: "#fd1231" }}>
+                                    {/* <span style={{ color: "#fd1231" }}>
                                       {room.room_name}
-                                    </span>
+                                    </span> */}
                                   </div>
                                 </div>
                               );
@@ -992,9 +992,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );
@@ -1032,9 +1032,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );
@@ -1082,9 +1082,9 @@ export default ({
                                 <span style={{ color: "1231fd" }}>
                                   {teacher.teacher_name}
                                 </span>
-                                <span style={{ color: "fd1231" }}>
+                                {/* <span style={{ color: "fd1231" }}>
                                   {room.room_name}
-                                </span>
+                                </span> */}
                               </div>
                             );
                           } else {
@@ -1115,9 +1115,9 @@ export default ({
                                     <div style={{ color: "#1231fd" }}>
                                       {teacher.teacher_name}
                                     </div>
-                                    <span style={{ color: "#fd1231" }}>
+                                    {/* <span style={{ color: "#fd1231" }}>
                                       {room.room_name}
-                                    </span>
+                                    </span> */}
                                   </div>
                                 </div>
                               );
@@ -1162,9 +1162,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );
@@ -1202,9 +1202,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );
@@ -1252,9 +1252,9 @@ export default ({
                                 <span style={{ color: "1231fd" }}>
                                   {teacher.teacher_name}
                                 </span>
-                                <span style={{ color: "fd1231" }}>
+                                {/* <span style={{ color: "fd1231" }}>
                                   {room.room_name}
-                                </span>
+                                </span> */}
                               </div>
                             );
                           } else {
@@ -1285,9 +1285,9 @@ export default ({
                                     <div style={{ color: "#1231fd" }}>
                                       {teacher.teacher_name}
                                     </div>
-                                    <span style={{ color: "#fd1231" }}>
+                                    {/* <span style={{ color: "#fd1231" }}>
                                       {room.room_name}
-                                    </span>
+                                    </span> */}
                                   </div>
                                 </div>
                               );
@@ -1332,9 +1332,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );
@@ -1372,9 +1372,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );
@@ -1422,9 +1422,9 @@ export default ({
                                 <span style={{ color: "1231fd" }}>
                                   {teacher.teacher_name}
                                 </span>
-                                <span style={{ color: "fd1231" }}>
+                                {/* <span style={{ color: "fd1231" }}>
                                   {room.room_name}
-                                </span>
+                                </span> */}
                               </div>
                             );
                           } else {
@@ -1455,9 +1455,9 @@ export default ({
                                     <div style={{ color: "#1231fd" }}>
                                       {teacher.teacher_name}
                                     </div>
-                                    <span style={{ color: "#fd1231" }}>
+                                    {/* <span style={{ color: "#fd1231" }}>
                                       {room.room_name}
-                                    </span>
+                                    </span> */}
                                   </div>
                                 </div>
                               );
@@ -1502,9 +1502,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );
@@ -1542,9 +1542,9 @@ export default ({
                                   <div style={{ color: "#1231fd" }}>
                                     {teacher.teacher_name}
                                   </div>
-                                  <span style={{ color: "#fd1231" }}>
+                                  {/* <span style={{ color: "#fd1231" }}>
                                     {room.room_name}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             );

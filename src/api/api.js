@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "http://192.168.1.180:3030/api";
+const url = "http://127.0.0.1:3030/api";
 
 export default class FormsApi {
   async post(i, data) {
